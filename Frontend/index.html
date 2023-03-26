@@ -19,19 +19,20 @@
     />
 
     <!-- JavaScript File Link -->
-    <script type="text/javascript" src="./js/script.js"></script>
+    <script type="text/javascript" src="./js/script.js" defer></script>
   </head>
   <body class="bg-pry">
     <div class="card bg-sec">
       <header class="text-pry header">Drag & Drop File Uploader</header>
-      <form action="#" class="form">
+      <form action="#" class="form text-light">
+        <input type="file" class="file-input" hidden />
         <i class="fa-solid fa-cloud-arrow-up"></i>
         <!-- <i class="fa-solid fa-cloud-arrow-up fa-bounce"></i> -->
         <p>Click or drag-and-drop your files here</p>
       </form>
       <section class="progress-area">
         <li class="row">
-          <i class="fa-solid fa-file-lines"></i>
+          <i class="fa-solid fa-file-lines text-light"></i>
           <div class="file-contents">
             <div class="file-details">
               <span class="file-name">img01.png • Uploading...</span>
@@ -46,13 +47,63 @@
       <section class="upload-area">
         <li class="row">
           <div class="file-contents">
-            <i class="fa-solid fa-file-lines"></i>
+            <i class="fa-solid fa-file-lines text-light"></i>
             <div class="file-details">
               <span class="file-name">img01.png • Uploaded</span>
               <span class="file-size">50 KB</span>
             </div>
           </div>
-          <i class="fa-solid fa-cloud-check"></i>
+          <i class="fa-solid fa-square-check text-pry"></i>
+        </li>
+        <li class="row">
+          <div class="file-contents">
+            <i class="fa-solid fa-file-lines text-light"></i>
+            <div class="file-details">
+              <span class="file-name">img01.png • Uploaded</span>
+              <span class="file-size">50 KB</span>
+            </div>
+          </div>
+          <i class="fa-solid fa-square-check text-pry"></i>
+        </li>
+        <li class="row">
+          <div class="file-contents">
+            <i class="fa-solid fa-file-lines text-light"></i>
+            <div class="file-details">
+              <span class="file-name">img01.png • Uploaded</span>
+              <span class="file-size">50 KB</span>
+            </div>
+          </div>
+          <i class="fa-solid fa-square-check text-pry"></i>
+        </li>
+        <li class="row">
+          <div class="file-contents">
+            <i class="fa-solid fa-file-lines text-light"></i>
+            <div class="file-details">
+              <span class="file-name">img01.png • Uploaded</span>
+              <span class="file-size">50 KB</span>
+            </div>
+          </div>
+          <i class="fa-solid fa-square-check text-pry"></i>
+        </li>
+        <li class="row">
+          <div class="file-contents">
+            <i class="fa-solid fa-file-lines text-light"></i>
+            <div class="file-details">
+              <span class="file-name">img01.png • Uploaded</span>
+              <span class="file-size">50 KB</span>
+            </div>
+          </div>
+          <i class="fa-solid fa-square-check text-pry"></i>
+        </li>
+        <li class="row">
+          <div class="file-contents">
+            <i class="fa-solid fa-file-lines text-light"></i>
+            <div class="file-details">
+              <span class="file-name">img01.png • Uploaded</span>
+              <span class="file-size">50 KB</span>
+            </div>
+          </div>
+          <i class="fa-solid fa-square-check text-pry"></i>
         </li>
       </section>
     </div>

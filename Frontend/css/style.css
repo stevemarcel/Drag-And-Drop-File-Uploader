@@ -24,6 +24,9 @@
 .text-sec {
   color: aliceblue;
 }
+.text-light {
+  color: #495da6;
+}
 .text-dark {
   color: #1d1918;
 }
@@ -37,8 +40,9 @@ body {
 
 .card {
   width: 430px;
-  padding: 2.5rem;
+  padding: 2rem;
   border-radius: 1rem;
+  margin: 1rem;
 }
 
 .header {
@@ -47,13 +51,89 @@ body {
   text-align: center;
 }
 
+/* Form Area */
 .form {
-  height: 10rem;
-  border: 2px dashed #202f66;
+  height: 9rem;
+  border: 2px dashed #495da6;
   border-radius: 0.6rem;
-  margin: 2rem 0;
+  margin: 1.5rem 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+.form i {
+  font-size: 5rem;
+}
+.form p {
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+/* Both Section Areas */
+.row {
+  background: #dde6fa;
+  margin-bottom: 0.5rem;
+  list-style: none;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.row i {
+  font-size: 2rem;
+}
+.file-details span {
+  font-size: 0.8rem;
+}
+
+/* Progress Area Section */
+.progress-area .file-contents {
+  width: 100%;
+  margin-left: 1rem;
+}
+.progress-area .file-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.progress-area .file-upload-progress-bar {
+  height: 0.3rem;
+  width: 100%;
+  background: aliceblue;
+  margin: 0.2rem 0;
+  border-radius: 0.2rem;
+}
+.file-upload-progress-bar .file-upload-progress {
+  height: 100%;
+  width: 0%;
+  background: #202f66;
+  border-radius: inherit;
+}
+
+/* Upload Area Section  */
+.upload-area {
+  margin-top: 1.5rem;
+  max-height: 11rem;
+  overflow-y: scroll;
+}
+.upload-area::-webkit-scrollbar {
+  width: 0;
+}
+.upload-area .file-contents {
+  display: flex;
+  align-items: center;
+}
+.upload-area .file-details {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1rem;
+}
+.upload-area .fa-square-check {
+  color: #202f66;
+}
+.upload-area .file-size {
+  font-size: 0.6rem;
+  color: #404040;
 }
