@@ -5,10 +5,56 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+
+    <!-- CSS File Link -->
     <link rel="stylesheet" href="./css/style.css" type="text/css" />
+
+    <!-- Font Awesome CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+      integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- JavaScript File Link -->
     <script type="text/javascript" src="./js/script.js"></script>
   </head>
-  <body>
-    <h1>File Upload</h1>
+  <body class="bg-pry">
+    <div class="card bg-sec">
+      <header class="text-pry header">Drag & Drop File Uploader</header>
+      <form action="#" class="form">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <!-- <i class="fa-solid fa-cloud-arrow-up fa-bounce"></i> -->
+        <p>Click or drag-and-drop your files here</p>
+      </form>
+      <section class="progress-area">
+        <li class="row">
+          <i class="fa-solid fa-file-lines"></i>
+          <div class="file-contents">
+            <div class="file-details">
+              <span class="file-name">img01.png • Uploading...</span>
+              <span class="load-percentage">50%</span>
+            </div>
+            <div class="file-upload-progress-bar">
+              <div class="file-upload-progress"></div>
+            </div>
+          </div>
+        </li>
+      </section>
+      <section class="upload-area">
+        <li class="row">
+          <div class="file-contents">
+            <i class="fa-solid fa-file-lines"></i>
+            <div class="file-details">
+              <span class="file-name">img01.png • Uploaded</span>
+              <span class="file-size">50 KB</span>
+            </div>
+          </div>
+          <i class="fa-solid fa-cloud-check"></i>
+        </li>
+      </section>
+    </div>
   </body>
 </html>
