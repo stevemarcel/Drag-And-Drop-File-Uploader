@@ -98,14 +98,14 @@ body {
   align-items: center;
   justify-content: space-between;
 }
-.progress-area .file-upload-progress-bar {
+.progress-area .progress-bar {
   height: 0.3rem;
   width: 100%;
   background: aliceblue;
   margin: 0.2rem 0;
   border-radius: 0.2rem;
 }
-.file-upload-progress-bar .file-upload-progress {
+.progress-bar .progress {
   height: 100%;
   width: 0%;
   background: #202f66;
