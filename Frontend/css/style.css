@@ -42,7 +42,14 @@ body {
   width: 430px;
   padding: 2rem;
   border-radius: 1rem;
-  margin: 1rem;
+  margin: 2rem;
+}
+
+.img-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
 }
 
 .header {
@@ -53,7 +60,7 @@ body {
 
 /* Form Area */
 .form {
-  height: 9rem;
+  height: 13rem;
   border: 2px dashed #495da6;
   border-radius: 0.6rem;
   margin: 1.5rem 0;
@@ -68,6 +75,9 @@ body {
 .form p {
   font-size: 0.9rem;
   margin: 0.5rem 0;
+}
+.form-container :hover {
+  cursor: pointer;
 }
 
 /* Both Section Areas */
@@ -108,7 +118,7 @@ body {
 .progress-bar .progress {
   height: 100%;
   width: 0%;
-  background: #202f66;
+  background: #495da6;
   border-radius: inherit;
 }
 
@@ -118,9 +128,12 @@ body {
   max-height: 11rem;
   overflow-y: scroll;
 }
-.upload-area::-webkit-scrollbar {
-  width: 0;
-}
+/* .upload-area::-webkit-scrollbar {
+  width: 0.5rem;
+} */
+/* .upload-area::-webkit-scrollbar-track {
+  background: #495da6;
+} */
 .upload-area .file-contents {
   display: flex;
   align-items: center;
@@ -129,9 +142,6 @@ body {
   display: flex;
   flex-direction: column;
   margin-left: 1rem;
-}
-.upload-area .fa-square-check {
-  color: #202f66;
 }
 .upload-area .file-size {
   font-size: 0.6rem;

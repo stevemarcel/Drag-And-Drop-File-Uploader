@@ -4,10 +4,15 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <meta
+      name="description"
+      content="This is a Drag & Drop File Uploader using HTML5, CSS and Vanilla Javascript. For the API call, XmlHTTPRequest is used. As for the server, a simple Express server is used to store the uploaded file in an uploads folder"
+    />
+    <title>Drag & Drop File Uploader</title>
 
-    <!-- CSS File Link -->
+    <!-- CSS Files Link -->
     <link rel="stylesheet" href="./css/style.css" type="text/css" />
+    <link rel="stylesheet" media="screen and (max-width: 768px)" href="./css/mobile.css" />
 
     <!-- Font Awesome CDN -->
     <link
@@ -23,13 +28,18 @@
   </head>
   <body class="bg-pry">
     <div class="card bg-sec">
+      <div class="img-container">
+        <img src="img/Shark-Colours-Logo.png" alt="Shark-Colours-Logo" srcset="" height="45rem" />
+      </div>
       <header class="text-pry header">Drag & Drop File Uploader</header>
-      <form action="#" class="form text-light">
-        <input type="file" class="file-input" hidden />
-        <i class="fa-solid fa-cloud-arrow-up"></i>
-        <!-- <i class="fa-solid fa-cloud-arrow-up fa-bounce"></i> -->
-        <p>Click or drag-and-drop your files here</p>
-      </form>
+      <div class="form-container">
+        <form action="#" class="form text-light" onmouseenter="addBounce()" onmouseleave="removeBounce()">
+          <input type="file" class="file-input" hidden />
+          <i id="upload-icon" class="fa-solid fa-cloud-arrow-up"></i>
+          <!-- <i class="fa-solid fa-cloud-arrow-up fa-bounce"></i> -->
+          <p>Click or drag-and-drop your files here</p>
+        </form>
+      </div>
       <!-- Progress Area Section -->
       <section class="progress-area"></section>
 

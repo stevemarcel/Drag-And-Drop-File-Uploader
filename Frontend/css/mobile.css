@@ -1,0 +1,22 @@
+.header {
+  font-size: 1.1rem;
+}
+
+/* Form Area */
+.form {
+  height: 10rem;
+}
+.form i {
+  font-size: 4rem;
+}
+.form p {
+  font-size: 0.7rem;
+}
+
+/* Both Section Areas */
+.row i {
+  font-size: 1.8rem;
+}
+.file-details span {
+  font-size: 0.77rem;
+}
