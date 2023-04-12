@@ -33,10 +33,9 @@
       </div>
       <header class="text-pry header">Drag & Drop File Uploader</header>
       <div class="form-container">
-        <form action="#" class="form text-light" onmouseenter="addBounce()" onmouseleave="removeBounce()">
-          <input type="file" class="file-input" hidden />
+        <form class="form text-light" onmouseenter="addBounce()" onmouseleave="removeBounce()" enctype="multipart/form-data">
+          <input type="file" class="file-input" hidden name="uploadedFile" />
           <i id="upload-icon" class="fa-solid fa-cloud-arrow-up"></i>
-          <!-- <i class="fa-solid fa-cloud-arrow-up fa-bounce"></i> -->
           <p>Click or drag-and-drop your files here</p>
         </form>
       </div>
