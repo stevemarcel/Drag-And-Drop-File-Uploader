@@ -31,7 +31,7 @@ const upload = multer({ storage: storage });
 
 // POST Route
 app.post("/uploads", upload.single("uploadedFile"), (req, res, next) => {
-  console.log(req.file);
+  // console.log(req.file);
   if (req.file === null) {
     return res.status(400).json({ error: "No File Uploaded!" });
   }

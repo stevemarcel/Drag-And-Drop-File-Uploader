@@ -3,22 +3,54 @@ const fileInput = form.querySelector(".file-input");
 const progressArea = document.querySelector(".progress-area");
 const uploadArea = document.querySelector(".upload-area");
 const uploadIcon = document.querySelector("#upload-icon");
+// const dropZone = document.querySelector("#drop-zone");
 
-function addBounce() {
-  uploadIcon.className = "fa-solid fa-cloud-arrow-up fa-bounce";
+function addHoverState() {
+  uploadIcon.classList.add("fa-bounce");
+  form.classList.add("form-hover");
+  // uploadIcon.className = "fa-solid fa-cloud-arrow-up fa-bounce";
 }
-function removeBounce() {
-  uploadIcon.className = "fa-solid fa-cloud-arrow-up";
+function removeHoverState() {
+  uploadIcon.classList.remove("fa-bounce");
+  form.classList.remove("form-hover");
+  // uploadIcon.className = "fa-solid fa-cloud-arrow-up";
 }
 
+["mouseenter", "dragover"].forEach((type) => {
+  form.addEventListener(type, (e) => {
+    e.preventDefault();
+    addHoverState();
+  });
+});
+
+["mouseleave", "dragleave", "dragend"].forEach((type) => {
+  form.addEventListener(type, (e) => {
+    e.preventDefault();
+    removeHoverState();
+  });
+});
+
+form.addEventListener("drop", (e) => {
+  e.preventDefault();
+  form.classList.add("drop");
+  if (e.dataTransfer.files.length) {
+    let file = e.dataTransfer.files[0];
+    uploadFile(file);
+    form.classList.remove("drop");
+    removeHoverState();
+  }
+});
 form.addEventListener("click", () => {
-  removeBounce();
   fileInput.click();
+  removeHoverState();
 });
 
 fileInput.onchange = ({ target }) => {
-  let file = target.files[0];
-  uploadFile(file);
+  if (target.files.length) {
+    let file = target.files[0];
+    uploadFile(file);
+    // file = {};
+  }
 };
 
 function uploadFile(file) {
@@ -27,13 +59,16 @@ function uploadFile(file) {
   // xhr.open("POST", "https://httpbin.org/post"); //Mock API endpoint
   xhr.open("POST", "/uploads");
 
+  // xhr.setRequestHeader("Content-Type", "multipart/form-data");
+
   xhr.upload.addEventListener("progress", ({ loaded, total }) => {
+    // console.log(loaded, total);
     loadedKB = Math.floor(loaded / 1000); // loaded file size in KB from bytes
     fileTotalKB = Math.floor(total / 1000); // total file size in KB from bytes
 
     let fileLoaded = Math.floor((loadedKB / fileTotalKB) * 100); //get percentage of the loaded file
-
     file ? (fileName = file.name) : null; //Setting file name
+    // console.log(fileName);
     // If the file name is longer than or equal to 12 characters, then cut it off at 12 and add file extension at the end
     if (fileName.length >= 12) {
       let splitName = fileName.split(".");
@@ -58,9 +93,9 @@ function uploadFile(file) {
   });
 
   xhr.addEventListener("load", () => {
-    console.log(xhr.status);
+    // console.log(xhr.status);
     const res = JSON.parse(xhr.response);
-    console.log(res.msg);
+    // console.log(res.msg);
 
     const serverFileName = res.serverFileName;
 
@@ -68,7 +103,7 @@ function uploadFile(file) {
     uploadedFileName = splitServerFileName[0].substring(0, 12) + "... ." + splitServerFileName[1];
     // let splitServerFileName = serverFileName.split("~");
     // const uploadedFileName = splitServerFileName[1];
-    console.log(uploadedFileName);
+    // console.log(uploadedFileName);
 
     let fileSize;
     // If the file size is less than 1000 add "KB" else convert to MB and add "MB"
@@ -93,11 +128,13 @@ function uploadFile(file) {
   });
 
   let payload = new FormData(form);
-  // payload.append("uploadedFile", file);
+  if (form.classList.contains("drop")) {
+    payload.append("uploadedFile", file);
+  }
 
   // Inspect the payload
-  // for (var pair of payload.entries()) {
-  //   console.log(pair[0] + ", " + pair[1]);
-  // }
+  for (var pair of payload.entries()) {
+    // console.log(pair[0] + ", " + pair[1]);
+  }
   xhr.send(payload);
 }

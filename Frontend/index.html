@@ -34,10 +34,13 @@
       </div>
       <header class="text-pry header">Drag & Drop File Uploader</header>
       <div class="form-container">
-        <form class="form text-light" onmouseenter="addBounce()" onmouseleave="removeBounce()" enctype="multipart/form-data">
+        <form class="form text-light" enctype="multipart/form-data">
+          <!-- <form class="form text-light"> -->
+          <!-- <div id="drop-zone"> -->
           <input type="file" class="file-input" hidden name="uploadedFile" />
           <i id="upload-icon" class="fa-solid fa-cloud-arrow-up"></i>
           <p>Click or drag-and-drop your files here</p>
+          <!-- </div> -->
         </form>
       </div>
       <!-- Progress Area Section -->
