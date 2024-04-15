@@ -107,7 +107,9 @@ function uploadFile(file) {
 
     let fileSize;
     // If the file size is less than 1000 add "KB" else convert to MB and add "MB"
-    fileTotalKB < 1000 ? (fileSize = fileTotalKB + " KB") : (fileSize = (fileTotalKB / 1000).toFixed(2) + " MB");
+    fileTotalKB < 1000
+      ? (fileSize = fileTotalKB + " KB")
+      : (fileSize = (fileTotalKB / 1000).toFixed(2) + " MB");
 
     if (loadedKB == fileTotalKB) {
       progressArea.innerHTML = "";
