@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,48 +6,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="This is a Drag & Drop File Uploader using HTML5, CSS and Vanilla Javascript. For the API call, XmlHTTPRequest is used. As for the server, a simple Express server is used to store the uploaded file in an uploads folder"
+      content="Secure Drag & Drop File Uploader for Images, Videos, PDFs, and Zipped files using Express and Multer."
     />
-    <title>Drag & Drop File Uploader</title>
-    <link rel="icon" type="image/x-icon" href="/Frontend/img/favicon.ico" />
+    <title>File Uploader | Shark Colours</title>
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
 
-    <!-- CSS Files Link -->
     <link rel="stylesheet" href="./css/style.css" type="text/css" />
     <link rel="stylesheet" media="screen and (max-width: 768px)" href="./css/mobile.css" />
 
-    <!-- Font Awesome CDN -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
       integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
       crossorigin="anonymous"
-      referrerpolicy="no-referrer"
+      referpolicy="no-referrer"
     />
 
-    <!-- JavaScript File Link -->
     <script type="text/javascript" src="./js/script.js" defer></script>
   </head>
   <body class="bg-pry">
-    <div class="card bg-sec">
+    <div class="card bg-sec" role="main">
       <div class="img-container">
-        <img src="img/Shark-Colours-Logo.png" alt="Shark-Colours-Logo" srcset="" height="45rem" />
+        <img src="img/Shark-Colours-Logo.png" alt="Shark-Colours-Logo" height="45" />
       </div>
-      <header class="text-pry header">Drag & Drop File Uploader</header>
+
+      <header class="text-pry header">File Uploader</header>
+
       <div class="form-container">
-        <form class="form text-light" enctype="multipart/form-data">
-          <!-- <form class="form text-light"> -->
-          <!-- <div id="drop-zone"> -->
-          <input type="file" class="file-input" hidden name="uploadedFile" />
-          <i id="upload-icon" class="fa-solid fa-cloud-arrow-up"></i>
-          <p>Click or drag-and-drop your files here</p>
-          <!-- </div> -->
+        <div class="title-group">
+          <label for="file-title" class="text-pry title-label">File Title (Optional)</label>
+          <input
+            type="text"
+            id="file-title"
+            class="title-input"
+            placeholder="e.g. Project Assets 2026"
+          />
+        </div>
+
+        <form
+          class="form text-light"
+          action="/api/uploads"
+          method="POST"
+          enctype="multipart/form-data"
+          aria-label="File upload area"
+          id="upload-form"
+        >
+          <input
+            type="file"
+            class="file-input"
+            name="uploadedFile"
+            id="file-input"
+            accept="image/*,video/*,.pdf,.zip,.rar,.7z"
+            hidden
+          />
+
+          <i id="upload-icon" class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+          <p id="upload-text">Click or drag-and-drop your files here</p>
+          <span class="format-support">(Images, Videos, PDFs, or ZIPs)</span>
         </form>
       </div>
-      <!-- Progress Area Section -->
-      <section class="progress-area"></section>
 
-      <!-- Upload Area Section -->
-      <section class="upload-area"></section>
+      <section class="progress-area" aria-live="polite"></section>
+
+      <section class="upload-area">
+        <div id="success-template" class="row success-row hidden-state">
+          <div class="file-contents">
+            <i class="fas fa-check-circle success-icon"></i>
+            <span class="name success-text" id="success-title">Download Is Ready 🎊</span>
+          </div>
+          <div class="share-box">
+            <input type="text" class="copy-url-input" readonly aria-label="Shareable link" />
+            <button onclick="copyToClipboard(this)" class="copy-btn-action">Copy</button>
+          </div>
+          <p class="expiry-warning" id="expiry-msg">Link expires in 8 days.</p>
+        </div>
+
+        <div id="error-template" class="row error-row hidden-state">
+          <div class="file-contents">
+            <i class="fas fa-exclamation-circle error-icon"></i>
+            <div class="file-details">
+              <span class="name">Upload Failed</span>
+              <span class="error-text" id="error-status"></span>
+            </div>
+          </div>
+          <button
+            type="button"
+            class="close-error"
+            onclick="this.parentElement.remove()"
+            title="Dismiss error"
+            aria-label="Dismiss error"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </section>
+
+      <section class="active-files-section">
+        <header class="text-sec active-header">Active Uploads</header>
+        <ul id="active-files-list"></ul>
+      </section>
     </div>
   </body>
 </html>

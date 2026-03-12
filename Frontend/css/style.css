@@ -8,6 +8,7 @@
   font-family: "poppins", sans-serif;
 }
 
+/* Color Utilities */
 .bg-pry {
   background-color: #202f66;
 }
@@ -39,7 +40,7 @@ body {
 }
 
 .card {
-  width: 430px;
+  width: 850px;
   padding: 2rem;
   border-radius: 1rem;
   margin: 2rem;
@@ -56,6 +57,8 @@ body {
   font-size: 1.5rem;
   font-weight: 600;
   text-align: center;
+  padding-bottom: 1.5rem;
+  text-transform: uppercase;
 }
 
 .hide {
@@ -65,42 +68,53 @@ body {
   display: block !important;
 }
 
-/* Form Area */
+/* --- Form Area --- */
 .form {
   height: 13rem;
   border: 2px dashed #495da6;
   border-radius: 0.6rem;
-  margin: 1.5rem 0;
+  margin: 1rem 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
 }
+
 .form i {
   font-size: 5rem;
+  transition: transform 0.2s ease;
 }
+
 .form p {
   font-size: 0.9rem;
   margin: 0.5rem 0;
 }
-.form-container :hover {
-  cursor: pointer;
-}
-.form-hover {
-  border-style: solid;
-  background-color: rgba(73, 93, 166, 0.1);
+
+/* Normal Mouse Hover */
+.form:hover {
+  border: 1px solid #202f66;
+  background-color: rgba(73, 93, 166, 0.12);
 }
 
-/* Drop Zone */
-/* #drop-zone {
-  height: inherit;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-} */
+/* Drag & Drop Hover State */
+.form.form-hover {
+  border: 1px solid #202f66;
+  background-color: rgba(73, 93, 166, 0.12);
+}
 
-/* Both Section Areas */
+.form.form-hover i,
+.form:hover i {
+  transform: scale(1.1);
+  color: #202f66;
+}
+
+.form.form-hover * {
+  pointer-events: none;
+}
+
+/* --- Progress/Upload Rows --- */
 .row {
   background: #dde6fa;
   margin-bottom: 0.5rem;
@@ -111,6 +125,7 @@ body {
   align-items: center;
   justify-content: space-between;
 }
+
 .row i {
   font-size: 2rem;
 }
@@ -118,16 +133,49 @@ body {
   font-size: 0.8rem;
 }
 
-/* Progress Area Section */
+/* --- Title Input Group --- */
+.title-group {
+  margin-bottom: 1rem;
+}
+
+.title-label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+}
+
+.title-input {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #495da6;
+  border-radius: 0.4rem;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.title-input:focus {
+  border-color: #202f66;
+  box-shadow: 0 0 5px rgba(32, 47, 102, 0.1);
+}
+
+.format-support {
+  font-size: 0.7rem;
+}
+
+/* --- Progress Area --- */
 .progress-area .file-contents {
   width: 100%;
   margin-left: 1rem;
 }
+
 .progress-area .file-details {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .progress-area .progress-bar {
   height: 0.3rem;
   width: 100%;
@@ -135,6 +183,7 @@ body {
   margin: 0.2rem 0;
   border-radius: 0.2rem;
 }
+
 .progress-bar .progress {
   height: 100%;
   width: 0%;
@@ -142,28 +191,357 @@ body {
   border-radius: inherit;
 }
 
-/* Upload Area Section  */
+/* --- Upload Area --- */
 .upload-area {
   margin-top: 1.5rem;
   max-height: 11rem;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
-/* .upload-area::-webkit-scrollbar {
-  width: 0.5rem;
-} */
-/* .upload-area::-webkit-scrollbar-track {
-  background: #495da6;
-} */
+
 .upload-area .file-contents {
   display: flex;
   align-items: center;
 }
+
 .upload-area .file-details {
   display: flex;
   flex-direction: column;
   margin-left: 1rem;
 }
+
 .upload-area .file-size {
   font-size: 0.6rem;
   color: #404040;
+}
+
+/* --- Success & Error State Feedback --- */
+.success-row {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 15px !important;
+  margin-top: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.success-icon {
+  color: #27ae60;
+  font-size: 1.5rem !important;
+  margin-right: 0.8rem;
+}
+
+.success-text {
+  color: #1e293b;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.error-row {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  padding: 1rem !important;
+  margin-top: 10px;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.error-icon {
+  color: #dc2626;
+  font-size: 1.5rem !important;
+  margin-right: 0.8rem;
+}
+
+.error-text {
+  font-size: 0.75rem;
+  display: block;
+  color: #b91c1c;
+  margin-top: 2px;
+}
+
+.error-support-link {
+  text-decoration: underline;
+}
+
+.close-error {
+  background: none;
+  border: none;
+  color: #ff4d4d;
+  cursor: pointer;
+  padding: 10px;
+  font-size: 1.2rem;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.close-error:hover {
+  opacity: 1;
+}
+
+/* --- Share Box --- */
+.share-box {
+  background: #ffffff;
+  border: 1px dashed #27ae60;
+  padding: 10px;
+  border-radius: 6px;
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.share-box input {
+  flex: 1;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  color: #495057;
+  font-family: monospace;
+  font-size: 13px;
+  padding: 8px;
+  outline: none;
+  border-radius: 4px;
+}
+
+.share-box button {
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.share-box button:hover {
+  background: #219150;
+}
+
+.expiry-warning {
+  color: #666;
+  font-size: 11px;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.btn-copied {
+  background-color: #1e293b !important;
+  transition: background 0.2s ease;
+}
+
+/* --- Active Uploaded Files Section --- */
+.active-files-section {
+  background: #202f66;
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.active-header {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#active-files-list {
+  list-style: none;
+  padding: 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+#active-files-list::-webkit-scrollbar {
+  width: 5px;
+}
+#active-files-list::-webkit-scrollbar-thumb {
+  background: #202f66;
+  border-radius: 10px;
+}
+
+.active-file-item {
+  background: rgba(255, 255, 255, 0.05);
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.file-name {
+  display: block;
+  font-weight: 500;
+  color: #fff;
+}
+
+.expiry-time {
+  font-size: 0.8rem;
+  color: #ccc;
+}
+
+.expiry-time.urgent {
+  color: #ff4d4d;
+  font-weight: bold;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Container for the buttons */
+.file-actions {
+  display: flex;
+  gap: 8px; /* Space between Copy and Delete buttons */
+}
+
+/* Delete Button Styling */
+.delete-btn {
+  background: rgba(255, 77, 77, 0.1); /* Subtle red background */
+  border: 1px solid rgba(255, 77, 77, 0.3);
+  color: #ff4d4d;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.delete-btn:hover {
+  background: #ff4d4d;
+  color: white;
+}
+
+/* Small adjustment to copy-small to match delete-btn height */
+.copy-small {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: opacity 0.2s;
+  background: #202f66;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.copy-small:hover {
+  opacity: 0.6;
+}
+
+/* Ensure the file-info doesn't get squeezed */
+.file-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1; /* Takes up remaining space */
+  margin-right: 15px;
+}
+
+/* --- Download Page Specifics --- */
+.download-card {
+  text-align: center;
+  max-width: 800px;
+  padding-top: 3rem !important;
+}
+
+.state-container {
+  padding: 1.5rem;
+}
+
+.hidden-state {
+  display: none !important;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.project-badge {
+  background: #dde6fa;
+  color: #202f66;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.message-box {
+  margin: 1.5rem 0;
+  line-height: 1.6;
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: fit-content;
+  padding: 0.8rem 2rem;
+  background: #202f66;
+  color: white !important;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.download-btn:hover {
+  background: #16214a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(32, 47, 102, 0.2);
+}
+
+.loading-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.footer-note {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 2rem;
+}
+
+.error-container {
+  color: #e11d48;
+}
+
+/* .error-icon-lg {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+} */
+
+/* Custom Scrollbar for Upload Area */
+.upload-area::-webkit-scrollbar {
+  width: 5px;
+}
+
+.upload-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.upload-area::-webkit-scrollbar-thumb {
+  background: #495da6;
+  border-radius: 10px;
 }

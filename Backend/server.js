@@ -1,59 +1,55 @@
-const express = require("express");
-const multer = require("multer");
-const path = require("path");
-const cors = require("cors");
-const colors = require("colors");
-const dotenv = require("dotenv");
+import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+import cors from "cors";
+import colors from "colors";
+import dotenv from "dotenv";
+import { v2 as cloudinary } from "cloudinary";
 
-// Load env variables
+import { connectDB } from "./config/db.js";
+import { adminAuth } from "./middlewares/adminAuth.js";
+import fileRoutes from "./routes/fileRoutes.js";
+import { startCleanupTask } from "./utils/cleanup.js";
+
 dotenv.config();
+connectDB();
 
-// Initialize express app
+startCleanupTask();
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 
-// Cors Mounting
+// Cloudinary Config
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 app.use(cors());
+app.use(express.json({ limit: "10mb" }));
 
-// serving website on the express server
-app.use("/", express.static(path.join(__dirname, "../Frontend")));
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, __dirname + "/uploads");
-  },
-  filename: (req, file, cb) => {
-    // const fileExt = path.extname(file.originalname);
-    cb(null, Date.now() + "~" + file.originalname);
-  },
+// --- 1. THE PROTECTED ADMIN ROUTE ---
+// When you go to "/", the adminAuth middleware checks for ?auth=your_key
+app.get("/", adminAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "../Frontend/index.html"));
 });
 
-const upload = multer({ storage: storage });
-
-// POST Route
-app.post("/uploads", upload.single("uploadedFile"), (req, res, next) => {
-  // console.log(req.file);
-  if (req.file === null) {
-    return res.status(400).json({ error: "No File Uploaded!" });
-  }
-  const file = req.file;
-  // Changing generated filename to original filename
-  const fileName = file.filename;
-  let splitFileName = fileName.split("~");
-  const serverFileName = splitFileName[1];
-
-  // Getting file type information
-  const fileType = file.mimetype;
-
-  res.json({
-    serverFileName: serverFileName,
-    filePath: file.path,
-    msg: `${fileType} file uploaded successful`,
-  });
+// --- 2. THE PUBLIC DOWNLOAD ROUTE ---
+// No middleware here
+app.get("/download", (req, res) => {
+  res.sendFile(path.join(__dirname, "../Frontend/download.html"));
 });
 
-// Start server
+// --- 3. STATIC ASSETS ---
+// Serve CSS, JS, and Images so the pages actually look good
+app.use("/css", express.static(path.join(__dirname, "../Frontend/css")));
+app.use("/js", express.static(path.join(__dirname, "../Frontend/js")));
+app.use("/img", express.static(path.join(__dirname, "../Frontend/img")));
+
+// Use API Routes
+app.use("/api", fileRoutes);
+
 const PORT = process.env.PORT || 5000;
-const STATUS = process.env.NODE_ENV;
-app.listen(PORT, () => {
-  console.log(`Server is running in ${STATUS} mode on port ${PORT}`.bgWhite.green);
-});
+app.listen(PORT, () => console.log(`\n🚀 Server started on port ${PORT}`.yellow.bold));
+console.log(`Mode: ${process.env.NODE_ENV || "development"}\n`.gray);

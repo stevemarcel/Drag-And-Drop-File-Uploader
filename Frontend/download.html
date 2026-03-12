@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Download Your Assets | Shark Colours</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" media="screen and (max-width: 768px)" href="./css/mobile.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+    />
+  </head>
+  <body class="bg-pry">
+    <div class="card bg-sec download-card">
+      <div class="img-container">
+        <img src="img/Shark-Colours-Logo.png" alt="Shark Colours" height="45" />
+      </div>
+
+      <div id="loading" class="state-container">
+        <i class="fas fa-spinner fa-spin text-pry loading-icon"></i>
+        <p>Retrieving your assets...</p>
+      </div>
+
+      <div id="content" class="state-container hidden-state">
+        <span class="project-badge" id="display-title">Project Assets</span>
+
+        <div class="message-box">
+          <p>
+            Congratulations on your new brand identity! We are confident it will make a significant
+            impression. Your design package is ready for download below.
+          </p>
+        </div>
+
+        <a href="#" id="download-link" class="download-btn">
+          <i class="fas fa-download"></i> DOWNLOAD DESIGN ASSETS
+        </a>
+
+        <p class="footer-note">
+          Need help? <a href="mailto:sharkcoloursng@gmail.com" class="text-pry">Contact Support</a
+          ><br />
+          <span id="expiry-timer">Calculating expiry...</span>
+        </p>
+      </div>
+
+      <div id="error-message" class="state-container error-container hidden-state">
+        <i class="fas fa-exclamation-triangle error-icon"></i>
+        <h3>Link Expired</h3>
+        <p>
+          This download link is no longer active. Please contact
+          <a href="mailto:sharkcoloursng@gmail.com" class="text-pry error-support-link">Support</a>
+          for assistance.
+        </p>
+      </div>
+    </div>
+
+    <script src="./js/download.js" defer></script>
+  </body>
+</html>
