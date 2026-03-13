@@ -36,18 +36,18 @@ app.get("/", adminAuth, (req, res) => {
 });
 
 // --- 2. THE PUBLIC DOWNLOAD ROUTE ---
-// No middleware here
+// Serve download page without auth
 app.get("/download", (req, res) => {
   res.sendFile(path.join(__dirname, "../Frontend/download.html"));
 });
 
 // --- 3. STATIC ASSETS ---
-// Serve CSS, JS, and Images so the pages actually look good
+// Serve CSS, JS, and Images
 app.use("/css", express.static(path.join(__dirname, "../Frontend/css")));
 app.use("/js", express.static(path.join(__dirname, "../Frontend/js")));
 app.use("/img", express.static(path.join(__dirname, "../Frontend/img")));
 
-// Use API Routes
+// API Routes
 app.use("/api", fileRoutes);
 
 const PORT = process.env.PORT || 5000;

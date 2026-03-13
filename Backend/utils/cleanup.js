@@ -1,6 +1,6 @@
 import cron from "node-cron";
 import { v2 as cloudinary } from "cloudinary";
-import File from "../models/File.js"; // Adjust path to your model
+import File from "../models/File.js";
 
 export const startCleanupTask = () => {
   // Runs every day at midnight (00:00)

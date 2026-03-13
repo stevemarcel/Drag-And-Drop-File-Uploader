@@ -11,7 +11,7 @@ const linkEl = document.getElementById("download-link");
  * Main function to fetch file metadata and prepare the download button.
  */
 async function fetchFileData() {
-  // 1. Validation: If no ID is present in the URL, show error immediately
+  // 1. Validation: If no ID in the URL, show error
   if (!fileId) {
     showError();
     return;
@@ -45,7 +45,6 @@ async function fetchFileData() {
         Link expires in ${diffDays} ${diffDays === 1 ? "day" : "days"}.
     `;
     } else {
-      // Safety check if user opens it exactly as it expires
       showError();
     }
 
@@ -66,10 +65,10 @@ async function fetchFileData() {
     // 6. Update Button Attributes
     linkEl.href = downloadUrl;
 
-    // Fallback: the 'download' attribute helps with naming the file
+    // Fallback: File naming
     linkEl.setAttribute("download", safeName);
 
-    // Open in a new tab as a safety measure so the user doesn't leave the app page
+    // Open in a new tab
     linkEl.target = "_blank";
   } catch (err) {
     console.error("Download Error:", err);

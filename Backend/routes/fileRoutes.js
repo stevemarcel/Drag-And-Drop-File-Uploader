@@ -4,7 +4,7 @@ import { uploadFile, getFileById, getAllFiles, deleteFile } from "../controllers
 import multer from "multer";
 
 const router = express.Router();
-const upload = multer({ dest: "Backend/uploads/" }); // Simple temp dest
+const upload = multer({ dest: "Backend/uploads/" });
 
 router.post("/uploads", adminAuth, upload.single("uploadedFile"), uploadFile);
 router.get("/files/:id", getFileById);

@@ -78,7 +78,7 @@
 }
 
 .active-file-item {
-  flex-direction: column; /* Stack name/time above buttons */
+  flex-direction: column;
   align-items: flex-start;
   gap: 15px;
   padding: 1rem;
@@ -90,7 +90,7 @@
 
 .file-name {
   font-size: 0.95rem;
-  word-break: break-all; /* Prevents long titles from pushing buttons off-screen */
+  word-break: break-all;
   display: block;
   margin-bottom: 5px;
 }
@@ -106,7 +106,7 @@
 }
 
 .file-actions button {
-  flex: 1; /* "Copy" and "Delete" equal width */
+  flex: 1;
   align-items: center;
   justify-content: center;
   gap: 10px;

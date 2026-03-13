@@ -30,7 +30,7 @@ fileInput.onchange = ({ target }) => {
   }
 };
 
-// 2. Drag and Drop
+// 2. Drag and Drop Logic
 let dragCounter = 0;
 form.addEventListener("dragenter", (e) => {
   e.preventDefault();
@@ -132,7 +132,6 @@ async function saveToDatabase(userTitle, url, publicId) {
         showErrorState(response.status);
       }
     } else {
-      // If we got a success status but no JSON, it likely worked anyway
       if (response.ok) {
         // Fallback if server responds with 201 but empty body
         progressArea.innerHTML = "";
@@ -204,28 +203,28 @@ function calculateExpiry(createdAt) {
   const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
   const diffDays = Math.floor(diffHrs / 24);
 
-  // 1. More than 24 hours remaining
+  // a. More than 24 hours remaining
   if (diffDays > 0) {
     return {
       text: `${diffDays}d ${diffHrs % 24}h remaining`,
       isUrgent: diffDays < 1,
     };
   }
-  // 2. Less than 24 hours, but more than 1 hour
+  // b. Less than 24 hours, but more than 1 hour
   else if (diffHrs > 0) {
     return {
       text: `${diffHrs}h ${diffMins % 60}m remaining`,
       isUrgent: true,
     };
   }
-  // 3. Less than 1 hour remaining
+  // c. Less than 1 hour remaining
   else if (diffMins > 0) {
     return {
       text: `${diffMins} mins left!`,
       isUrgent: true,
     };
   }
-  // 4. Expired
+  // d. Expired
   else {
     return { text: "Expired", isUrgent: true };
   }
@@ -265,8 +264,8 @@ window.copyManual = (path, btn) => {
     btn.style.background = "";
   }, 2000);
 };
-// 6. UI State Handlers
 
+// 6. UI State Handlers
 // Show success state with download link
 function showSuccessState(data) {
   const clone = successTemplate.cloneNode(true);
