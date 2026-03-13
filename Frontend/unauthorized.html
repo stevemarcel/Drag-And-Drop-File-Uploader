@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Access Denied | Shark Colours</title>
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" media="screen and (max-width: 768px)" href="./css/mobile.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body class="auth-page">
+    <div class="auth-container">
+      <div class="lock-icon-wrapper">
+        <i class="fas fa-lock icon"></i>
+      </div>
+      <h1 class="auth-title">Protected Area</h1>
+      <p class="auth-message">Please enter your Access Key to view the dashboard.</p>
+      <form class="auth-form" id="loginForm">
+        <div class="input-group">
+          <input
+            type="password"
+            id="authInput"
+            placeholder="Enter Access Key..."
+            required
+            aria-label="Access Key"
+          />
+
+          <button type="button" id="togglePassword" class="icon-btn" title="Show/Hide Key">
+            <i class="fas fa-eye" id="eyeIcon"></i>
+          </button>
+
+          <button type="submit" class="submit-btn" title="Login" aria-label="Submit Access Key">
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </form>
+      <div class="auth-footer">
+        <span class="brand-text">Shark Colours</span>
+        <p class="support-text">System Administrator: Shark Colours NG</p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -4,6 +4,11 @@ const titleInput = document.querySelector("#file-title");
 const progressArea = document.querySelector(".progress-area");
 const uploadArea = document.querySelector(".upload-area");
 
+const loginForm = document.getElementById("loginForm");
+const authInput = document.getElementById("authInput");
+const togglePassword = document.getElementById("togglePassword");
+const eyeIcon = document.getElementById("eyeIcon");
+
 const urlParams = new URLSearchParams(window.location.search);
 const authKey = urlParams.get("auth");
 
@@ -15,7 +20,26 @@ const errorTemplate = document.getElementById("error-template");
 const CLOUD_NAME = "dphlb0nsu";
 const UPLOAD_PRESET = "client_side_shark_upload";
 
-// 1. Trigger File Selection
+// 1. Authentication Logic
+// Toggle logic
+togglePassword.addEventListener("click", () => {
+  const type = authInput.getAttribute("type") === "password" ? "text" : "password";
+  authInput.setAttribute("type", type);
+
+  // Toggle icon classes
+  eyeIcon.classList.toggle("fa-eye");
+  eyeIcon.classList.toggle("fa-eye-slash");
+});
+
+loginForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const key = document.getElementById("authInput").value;
+  // Redirects current page to include the auth query
+  window.location.href =
+    window.location.origin + window.location.pathname + "?auth=" + encodeURIComponent(key);
+});
+
+// 2. Trigger File Selection
 form.addEventListener("click", () => fileInput.click());
 
 fileInput.onchange = ({ target }) => {
@@ -30,7 +54,7 @@ fileInput.onchange = ({ target }) => {
   }
 };
 
-// 2. Drag and Drop Logic
+// 3. Drag and Drop Logic
 let dragCounter = 0;
 form.addEventListener("dragenter", (e) => {
   e.preventDefault();
@@ -54,7 +78,7 @@ form.addEventListener("drop", (e) => {
   if (file) uploadFile(file, file.name);
 });
 
-// 3. Upload Logic
+// 4. Upload Logic
 async function uploadFile(file, name) {
   const userTitle = titleInput.value.trim() || file.name;
   const folderName = userTitle.replace(/[^a-z0-9]/gi, "_");
@@ -106,7 +130,7 @@ async function uploadFile(file, name) {
   }
 }
 
-// 4. Save Metadata to MongoDB
+// 5. Save Metadata to MongoDB
 async function saveToDatabase(userTitle, url, publicId) {
   try {
     const response = await fetch(`/api/uploads?auth=${authKey}`, {
@@ -146,7 +170,7 @@ async function saveToDatabase(userTitle, url, publicId) {
   }
 }
 
-// 5. Fetches all active Uploads
+// 7. Fetches all active Uploads
 async function fetchActiveFiles() {
   const listContainer = document.querySelector("#active-files-list");
   if (!listContainer) return;
@@ -265,7 +289,7 @@ window.copyManual = (path, btn) => {
   }, 2000);
 };
 
-// 6. UI State Handlers
+// 8. UI State Handlers
 // Show success state with download link
 function showSuccessState(data) {
   const clone = successTemplate.cloneNode(true);
