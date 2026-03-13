@@ -10,9 +10,9 @@ The system is designed for developers and creators who need a **"WeTransfer" sty
 
 The uploader generates "Clean URLs" for direct asset downloads, bypassing standard web previews to ensure a professional client experience.
 
-[<kbd> <br> CHECK OUT LIVE DEMO <br> </kbd>][Link]
-
-[Link]: https://drag-and-drop-uploader.onrender.com/ "CHECK OUT LIVE DEMO"
+<a href="https://drag-and-drop-uploader.onrender.com/" target="_blank">
+  <kbd> <br> CHECK OUT LIVE DEMO <br> </kbd>
+</a>
 
 ---
 
