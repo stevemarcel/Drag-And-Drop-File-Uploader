@@ -4,25 +4,18 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Secure Drag & Drop File Uploader for Images, Videos, PDFs, and Zipped files using Express and Multer."
-    />
+    <meta name="description" content="Secure Drag & Drop File Uploader for Shark Colours." />
     <title>File Uploader | Shark Colours</title>
-    <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
 
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
     <link rel="stylesheet" href="./css/style.css" type="text/css" />
     <link rel="stylesheet" media="screen and (max-width: 768px)" href="./css/mobile.css" />
-
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
-      integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
-      crossorigin="anonymous"
-      referpolicy="no-referrer"
     />
 
-    <script type="text/javascript" src="./js/script.js" defer></script>
+    <script src="./js/script.js" defer></script>
   </head>
   <body class="bg-pry">
     <div class="card bg-sec" role="main">
@@ -43,44 +36,45 @@
           />
         </div>
 
-        <form
-          class="form text-light"
-          action="/api/uploads"
-          method="POST"
-          enctype="multipart/form-data"
-          aria-label="File upload area"
-          id="upload-form"
-        >
-          <input
-            type="file"
-            class="file-input"
-            name="uploadedFile"
-            id="file-input"
-            accept="image/*,video/*,.pdf,.zip,.rar,.7z"
-            hidden
-          />
-
+        <div class="form text-light" id="upload-form" aria-label="File upload area">
+          <input type="file" id="file-input" accept="image/*,video/*,.pdf,.zip,.rar,.7z" hidden />
           <i id="upload-icon" class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
           <p id="upload-text">Click or drag-and-drop your files here</p>
           <span class="format-support">(Images, Videos, PDFs, or ZIPs)</span>
-        </form>
+        </div>
       </div>
 
       <section class="progress-area" aria-live="polite"></section>
 
       <section class="upload-area">
         <div id="success-template" class="row success-row hidden-state">
-          <div class="file-contents">
+          <div class="success-header">
             <i class="fas fa-check-circle success-icon"></i>
-            <span class="name success-text" id="success-title">Download Is Ready 🎊</span>
+            <span class="success-text"></span>
           </div>
           <div class="share-box">
-            <input type="text" class="copy-url-input" readonly aria-label="Shareable link" />
-            <button onclick="copyToClipboard(this)" class="copy-btn-action">Copy</button>
+            <input
+              type="text"
+              class="copy-url-input"
+              readonly
+              aria-label="Shareable link"
+              title="Shareable link"
+            />
+            <button type="button" onclick="window.copyToClipboard(this)" class="copy-btn-action">
+              Copy
+            </button>
           </div>
-          <p class="expiry-warning" id="expiry-msg">Link expires in 8 days.</p>
-        </div>
+          <p class="expiry-warning">Link expires in 8 days.</p>
 
+          <button
+            type="button"
+            class="close-btn"
+            onclick="this.parentElement.remove()"
+            title="Dismiss"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
         <div id="error-template" class="row error-row hidden-state">
           <div class="file-contents">
             <i class="fas fa-exclamation-circle error-icon"></i>
@@ -92,9 +86,8 @@
           <button
             type="button"
             class="close-error"
-            onclick="this.parentElement.remove()"
-            title="Dismiss error"
-            aria-label="Dismiss error"
+            onclick="window.dismissError(this)"
+            title="Dismiss"
           >
             <i class="fas fa-times"></i>
           </button>
@@ -105,6 +98,20 @@
         <header class="text-sec active-header">Active Uploads</header>
         <ul id="active-files-list"></ul>
       </section>
+    </div>
+
+    <div id="custom-modal" class="modal-overlay hidden-state">
+      <div class="modal-card">
+        <div class="modal-icon">
+          <i class="fa-solid fa-circle-exclamation"></i>
+        </div>
+        <h3>Confirm Delete</h3>
+        <p>Are you sure you want to permanently remove this file? This action cannot be undone.</p>
+        <div class="modal-actions">
+          <button id="modal-cancel" class="btn-secondary">Cancel</button>
+          <button id="modal-confirm" class="btn-danger">Delete File</button>
+        </div>
+      </div>
     </div>
   </body>
 </html>

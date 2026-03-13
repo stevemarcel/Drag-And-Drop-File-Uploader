@@ -1,4 +1,13 @@
-/* General Layout Mobile Scaling */
+/**
+ * * RESPONSIVE OVERRIDES
+ * Target: Screens <= 768px
+ *
+ * 1. SCALING        : Reducing card width and padding
+ * 2. TYPOGRAPHY     : Adjusting font sizes for smaller viewports
+ * 3. ADAPTIVE UI    : Converting flex rows to columns for mobile utility
+ * 4. INTERACTION    : Increasing touch target sizes for mobile buttons
+ */
+
 .card {
   width: 95%;
   margin: 1rem auto;
@@ -9,31 +18,16 @@
   font-size: 1.1rem;
 }
 
-/* Form Area Scaling */
 .form {
   height: 10rem;
 }
 
 .form i {
-  font-size: 4rem;
+  font-size: 3.5rem;
 }
 
 .form p {
-  font-size: 0.7rem;
-}
-
-/* List Item Scaling */
-.row i {
-  font-size: 1.8rem;
-}
-
-.file-details span {
-  font-size: 0.77rem;
-}
-
-.format-support {
-  font-size: 0.65rem;
-  margin-top: 2px;
+  font-size: 0.75rem;
 }
 
 .title-input {
@@ -41,7 +35,7 @@
   font-size: 0.85rem;
 }
 
-/* Success/Error Feedback on Mobile */
+/* Success Box Mobile */
 .success-row .share-box {
   flex-direction: column;
 }
@@ -53,35 +47,14 @@
 
 .share-box button {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
 }
 
-/* Download Page Scaling */
-.download-card {
-  width: 92%;
-  padding: 1.5rem;
-}
-
-.message-box {
-  font-size: 0.85rem;
-}
-
-.download-btn {
-  font-size: 0.9rem;
-  padding: 0.8rem 1.5rem;
-  width: 100%;
-}
-
-/* Active Links Dashboard Scaling */
-.active-files-section {
-  margin-top: 2rem;
-}
-
+/* Active List Mobile */
 .active-file-item {
   flex-direction: column;
   align-items: flex-start;
   gap: 15px;
-  padding: 1rem;
 }
 
 .file-info {
@@ -89,33 +62,23 @@
 }
 
 .file-name {
-  font-size: 0.95rem;
-  word-break: break-all;
-  display: block;
-  margin-bottom: 5px;
-}
-
-.expiry-time {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
 }
 
 .file-actions {
   width: 100%;
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
+/* Touch Targets for Mobile */
 .file-actions button {
   flex: 1;
-  align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 12px 5px;
-  font-size: 0.8rem;
-  border-radius: 6px;
+  padding: 12px;
+  font-size: 0.75rem;
 }
 
-/* Shorten list */
 #active-files-list {
-  max-height: 350px;
+  max-height: 450px;
 }

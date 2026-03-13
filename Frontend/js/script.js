@@ -1,344 +1,288 @@
-const form = document.querySelector("#upload-form");
-const fileInput = document.querySelector("#file-input");
-const titleInput = document.querySelector("#file-title");
-const progressArea = document.querySelector(".progress-area");
-const uploadArea = document.querySelector(".upload-area");
+// Logic: Config -> UI Selectors -> Auth -> Upload -> DB -> UI Updates
 
-const loginForm = document.getElementById("loginForm");
-const authInput = document.getElementById("authInput");
-const togglePassword = document.getElementById("togglePassword");
-const eyeIcon = document.getElementById("eyeIcon");
-
+// --- 1. CONFIGURATION ---
+const CLOUD_NAME = "dphlb0nsu";
+const UPLOAD_PRESET = "client_side_shark_upload";
 const urlParams = new URLSearchParams(window.location.search);
 const authKey = urlParams.get("auth");
 
-// State Templates
-const successTemplate = document.getElementById("success-template");
-const errorTemplate = document.getElementById("error-template");
-
-// Cloudinary CONFIG
-const CLOUD_NAME = "dphlb0nsu";
-const UPLOAD_PRESET = "client_side_shark_upload";
-
-// 1. Fetches all active Uploads
-async function fetchActiveFiles() {
-  const listContainer = document.querySelector("#active-files-list");
-  if (!listContainer) return;
-
-  try {
-    const response = await fetch(`/api/all-files?auth=${authKey}`);
-    if (!response.ok) return;
-
-    const files = await response.json();
-    listContainer.innerHTML = ""; // Clear loader
-
-    if (files.length === 0) {
-      listContainer.innerHTML = '<li class="no-files">No active links found.</li>';
-      return;
-    }
-
-    files.forEach((file) => {
-      const timeRemaining = calculateExpiry(file.createdAt);
-      const li = document.createElement("li");
-      li.className = "active-file-item";
-      li.innerHTML = `
-        <div class="file-info">
-          <span class="file-name">${file.userTitle}</span>
-          <span class="expiry-time ${timeRemaining.isUrgent ? "urgent" : ""}">
-            <i class="fa-regular fa-clock"></i> ${timeRemaining.text}
-          </span>
-        </div>
-        <div class="file-actions">
-          <button type="button" class="copy-small" onclick="copyManual('/download?id=${file._id}', this)">
-            <i class="fa-solid fa-link"></i> Copy Link
-          </button>
-          <button type="button" class="delete-btn" onclick="deleteFileRecord('${file._id}', this)">
-            <i class="fa-solid fa-trash"></i> Delete
-          </button>
-        </div>
-      `;
-      listContainer.appendChild(li);
-    });
-  } catch (err) {
-    console.error("Error loading active files:", err);
-  }
-}
-
-// Time difference between now and expiry (8 days from creation)
-function calculateExpiry(createdAt) {
-  const created = new Date(createdAt);
-  const expiry = new Date(created.getTime() + 8 * 24 * 60 * 60 * 1000);
-  const now = new Date();
-
-  const diffMs = expiry - now;
-
-  // Total units
-  const diffMins = Math.floor(diffMs / (1000 * 60));
-  const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
-  const diffDays = Math.floor(diffHrs / 24);
-
-  // a. More than 24 hours remaining
-  if (diffDays > 0) {
-    return {
-      text: `${diffDays}d ${diffHrs % 24}h remaining`,
-      isUrgent: diffDays < 1,
-    };
-  }
-  // b. Less than 24 hours, but more than 1 hour
-  else if (diffHrs > 0) {
-    return {
-      text: `${diffHrs}h ${diffMins % 60}m remaining`,
-      isUrgent: true,
-    };
-  }
-  // c. Less than 1 hour remaining
-  else if (diffMins > 0) {
-    return {
-      text: `${diffMins} mins left!`,
-      isUrgent: true,
-    };
-  }
-  // d. Expired
-  else {
-    return { text: "Expired", isUrgent: true };
-  }
-}
-
-// Initial Fetch of Active Files
-fetchActiveFiles();
-
-// 2. Authentication Logic
-// Toggle logic
-togglePassword.addEventListener("click", () => {
-  const type = authInput.getAttribute("type") === "password" ? "text" : "password";
-  authInput.setAttribute("type", type);
-
-  // Toggle icon classes
-  eyeIcon.classList.toggle("fa-eye");
-  eyeIcon.classList.toggle("fa-eye-slash");
-});
-
-loginForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const key = document.getElementById("authInput").value;
-  // Redirects current page to include the auth query
-  window.location.href =
-    window.location.origin + window.location.pathname + "?auth=" + encodeURIComponent(key);
-});
-
-// 3. Trigger File Selection
-form.addEventListener("click", () => fileInput.click());
-
-fileInput.onchange = ({ target }) => {
-  let file = target.files[0];
-  if (file) {
-    let fileName = file.name;
-    if (fileName.length >= 18) {
-      let splitName = fileName.split(".");
-      fileName = splitName[0].substring(0, 15) + "... ." + splitName[1];
-    }
-    uploadFile(file, fileName);
-  }
+// --- 2. SELECTORS ---
+const selectors = {
+  form: document.querySelector("#upload-form"),
+  fileInput: document.querySelector("#file-input"),
+  titleInput: document.querySelector("#file-title"),
+  progressArea: document.querySelector(".progress-area"),
+  uploadArea: document.querySelector(".upload-area"),
+  listContainer: document.querySelector("#active-files-list"),
+  // Auth specific (only on unauthorized.html)
+  loginForm: document.getElementById("loginForm"),
+  authInput: document.getElementById("authInput"),
+  togglePassword: document.getElementById("togglePassword"),
+  eyeIcon: document.getElementById("eyeIcon"),
 };
 
-// 4. Drag and Drop Logic
-let dragCounter = 0;
-form.addEventListener("dragenter", (e) => {
-  e.preventDefault();
-  dragCounter++;
-  form.classList.add("form-hover");
-});
+// --- 3. AUTHENTICATION LOGIC (Only runs on Login Page) ---
+if (selectors.loginForm) {
+  selectors.togglePassword.addEventListener("click", () => {
+    const isPass = selectors.authInput.type === "password";
+    selectors.authInput.type = isPass ? "text" : "password";
+    selectors.eyeIcon.classList.toggle("fa-eye");
+    selectors.eyeIcon.classList.toggle("fa-eye-slash");
+  });
 
-form.addEventListener("dragleave", (e) => {
-  e.preventDefault();
-  dragCounter--;
-  if (dragCounter === 0) form.classList.remove("form-hover");
-});
+  selectors.loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const key = selectors.authInput.value;
+    window.location.href = `${window.location.origin}${window.location.pathname}?auth=${encodeURIComponent(key)}`;
+  });
+}
 
-form.addEventListener("dragover", (e) => e.preventDefault());
+// --- 4. FILE UPLOAD & DRAG/DROP (Only runs on Dashboard) ---
+if (selectors.form) {
+  selectors.form.onclick = () => selectors.fileInput.click();
 
-form.addEventListener("drop", (e) => {
-  e.preventDefault();
-  dragCounter = 0;
-  form.classList.remove("form-hover");
-  let file = e.dataTransfer.files[0];
-  if (file) uploadFile(file, file.name);
-});
+  selectors.fileInput.onchange = ({ target }) => {
+    if (target.files[0]) handleUpload(target.files[0]);
+  };
 
-// 5. Upload Logic
-async function uploadFile(file, name) {
-  const userTitle = titleInput.value.trim() || file.name;
+  let dragCounter = 0;
+  ["dragenter", "dragover", "dragleave", "drop"].forEach((evt) => {
+    selectors.form.addEventListener(evt, (e) => e.preventDefault());
+  });
+
+  selectors.form.addEventListener("dragenter", () => {
+    dragCounter++;
+    selectors.form.classList.add("form-hover");
+  });
+
+  selectors.form.addEventListener("dragleave", () => {
+    dragCounter--;
+    if (dragCounter === 0) selectors.form.classList.remove("form-hover");
+  });
+
+  selectors.form.addEventListener("drop", (e) => {
+    dragCounter = 0;
+    selectors.form.classList.remove("form-hover");
+    if (e.dataTransfer.files[0]) handleUpload(e.dataTransfer.files[0]);
+  });
+}
+
+// --- 5. CORE FUNCTIONS ---
+// Upload handling function
+async function handleUpload(file) {
+  const userTitle = selectors.titleInput.value.trim() || file.name;
   const folderName = userTitle.replace(/[^a-z0-9]/gi, "_");
 
-  // a. Prepare Cloudinary Form Data
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", UPLOAD_PRESET);
   formData.append("folder", `shark_uploads/${folderName}`);
 
-  try {
-    // b. Upload directly to Cloudinary
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`);
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`);
 
-    xhr.upload.addEventListener("progress", ({ loaded, total }) => {
-      let fileLoaded = Math.floor((loaded / total) * 100);
-      let statusText = fileLoaded < 100 ? "Uploading to Cloud" : "Securing...";
+  xhr.upload.onprogress = ({ loaded, total }) => {
+    let percent = Math.floor((loaded / total) * 100);
+    let status = percent < 100 ? "Uploading..." : "Securing...";
+    renderProgress(file.name, percent, status);
+  };
 
-      progressArea.innerHTML = `
-        <li class="row">
-          <i class="fas fa-file-alt text-pry"></i>
-          <div class="file-contents">
-            <div class="file-details">
-              <span class="name">${name} • ${statusText}</span>
-              <span class="percent">${fileLoaded}%</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress" style="width: ${fileLoaded}%"></div>
-            </div>
-          </div>
-        </li>`;
-    });
-
-    xhr.onreadystatechange = async function () {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          const cloudRes = JSON.parse(xhr.responseText);
-          saveToDatabase(userTitle, cloudRes.secure_url, cloudRes.public_id);
-        } else {
-          progressArea.innerHTML = "";
-          showErrorState(xhr.status);
-        }
-      }
-    };
-    xhr.send(formData);
-  } catch (err) {
-    showErrorState("Upload Error");
-  }
+  xhr.onload = async () => {
+    if (xhr.status === 200) {
+      const res = JSON.parse(xhr.responseText);
+      await saveToDatabase(userTitle, res.secure_url, res.public_id);
+    } else {
+      showError(xhr.status);
+    }
+  };
+  xhr.send(formData);
 }
 
-// 6. Save Metadata to MongoDB
-async function saveToDatabase(userTitle, url, publicId) {
+// Database saving function
+async function saveToDatabase(title, url, id) {
   try {
-    const response = await fetch(`/api/uploads?auth=${authKey}`, {
+    const res = await fetch(`/api/uploads?auth=${authKey}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userTitle: userTitle,
-        cloudinaryUrl: url,
-        cloudinaryId: publicId,
-      }),
+      body: JSON.stringify({ userTitle: title, cloudinaryUrl: url, cloudinaryId: id }),
     });
-
-    const contentType = response.headers.get("content-type");
-    if (contentType && contentType.indexOf("application/json") !== -1) {
-      const data = await response.json();
-      progressArea.innerHTML = "";
-
-      console.log("Mongo DB res:", data);
-
-      if (response.ok) {
-        showSuccessState(data);
-      } else {
-        showErrorState(response.status);
-      }
-    } else {
-      if (response.ok) {
-        // Fallback if server responds with 201 but empty body
-        progressArea.innerHTML = "";
-        showSuccessState({ userTitle: userTitle, fileId: "refresh-page" });
-      } else {
-        throw new Error("Non-JSON response");
-      }
-    }
+    const data = await res.json();
+    selectors.progressArea.innerHTML = "";
+    if (res.ok) showSuccess(data);
+    else showError(res.status);
   } catch (err) {
-    console.error("The REAL error is:", err);
-    showErrorState("DB Error");
+    showError("DB_ERR");
   }
 }
 
-// 7. Admin-only: Delete file record and Cloudinary asset
-window.deleteFileRecord = async (id, btn) => {
-  if (!confirm("Are you sure you want to delete this file from the cloud and database?")) return;
-
+// Fetch and display active files on page load
+async function fetchActiveFiles() {
+  if (!selectors.listContainer) return;
   try {
-    const response = await fetch(`/api/files/${id}?auth=${authKey}`, {
-      method: "DELETE",
+    const res = await fetch(`/api/all-files?auth=${authKey}`);
+    const files = await res.json();
+    selectors.listContainer.innerHTML = files.length
+      ? ""
+      : '<li class="no-files" style="color:white; text-align:center; padding:20px;">No active links found.</li>';
+
+    files.forEach((file) => {
+      const expiry = calculateExpiry(file.createdAt);
+      const li = document.createElement("li");
+      li.className = "active-file-item";
+      li.innerHTML = `
+                <div class="file-info">
+                    <span class="file-name">${file.userTitle}</span>
+                    <span class="expiry-time ${expiry.isUrgent ? "urgent" : ""}">
+                        <i class="fa-regular fa-clock"></i> ${expiry.text}
+                    </span>
+                </div>
+                <div class="file-actions">
+                    <button type="button" class="copy-small" onclick="window.copyManual('/download?id=${file._id}', this)">
+                        <i class="fa-solid fa-link"></i> Copy Link
+                    </button>
+                    <button type="button" class="delete-btn" onclick="window.deleteFileRecord('${file._id}', this)">
+                        <i class="fa-solid fa-trash"></i> Delete
+                    </button>
+                </div>`;
+      selectors.listContainer.appendChild(li);
     });
-
-    if (response.ok) {
-      // Remove the item from the UI immediately
-      btn.closest(".active-file-item").remove();
-    } else {
-      alert("Failed to delete file.");
-    }
-  } catch (err) {
-    console.error("Delete request failed:", err);
+  } catch (e) {
+    console.error("Load failed", e);
   }
-};
+}
 
-// 8. UI State Handlers
-// a. Show success state with download link
-function showSuccessState(data) {
-  const clone = successTemplate.cloneNode(true);
-  clone.id = "";
-  clone.classList.remove("hidden-state");
+// --- 6. HELPERS ---
+// Expiry calculation function
+function calculateExpiry(date) {
+  const diff = new Date(date).getTime() + 8 * 24 * 60 * 60 * 1000 - Date.now();
+  const days = Math.floor(diff / 86400000);
+  const hrs = Math.floor((diff % 86400000) / 3600000);
+  if (diff <= 0) return { text: "Expired", isUrgent: true };
+  return {
+    text: days > 0 ? `${days}d ${hrs}h left` : `${hrs}h remaining`,
+    isUrgent: days < 1,
+  };
+}
 
-  const titleEl = clone.querySelector(".success-text");
-  const copyInput = clone.querySelector(".copy-url-input");
+// Progress bar rendering function
+function renderProgress(name, pct, status) {
+  selectors.progressArea.innerHTML = `
+        <li class="row">
+            <div class="file-details">
+                <span class="name">
+                    <i class="fas fa-file-alt"></i> ${name}
+                </span>
+                <span class="percent">${pct}%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress" style="width:${pct}%"></div>
+            </div>
+            <p class="progress-bar-status">${status}</p>
+        </li>`;
+}
 
-  const link = `${window.location.origin}/download?id=${data.fileId}`;
-  if (titleEl) {
-    titleEl.innerText = `${data.userTitle} Is Ready For Download 🎊`;
-  }
-  if (copyInput) {
-    copyInput.value = link;
-  }
-
-  uploadArea.prepend(clone);
-  titleInput.value = "";
-
+// Success display function
+function showSuccess(data) {
+  const temp = document.getElementById("success-template").cloneNode(true);
+  temp.id = "";
+  temp.classList.remove("hidden-state");
+  temp.querySelector(".success-text").innerText = `${data.userTitle} Is Ready! 🎊`;
+  temp.querySelector(".copy-url-input").value =
+    `${window.location.origin}/download?id=${data.fileId}`;
+  selectors.uploadArea.prepend(temp);
+  selectors.titleInput.value = "";
   fetchActiveFiles();
 }
 
-// b. Show error state with status code
-function showErrorState(status) {
-  const clone = errorTemplate.cloneNode(true);
-  clone.id = "";
-  clone.classList.remove("hidden-state");
-  clone.querySelector("#error-status").innerText = `Status: ${status}`;
-  uploadArea.prepend(clone);
+// Error display function
+function showError(msg) {
+  const temp = document.getElementById("error-template").cloneNode(true);
+  temp.id = "";
+  temp.classList.remove("hidden-state");
+  temp.querySelector("#error-status").innerText = `Error: ${msg}`;
+  selectors.uploadArea.prepend(temp);
 }
 
-// 9. Simple helper for the manual copy buttons
+// --- 7. GLOBAL WINDOW ATTACHMENTS ---
+// Error dismissal handler
+window.dismissError = (btn) => {
+  if (selectors.progressArea) selectors.progressArea.innerHTML = "";
+  btn.parentElement.remove();
+};
+
+// Manual copy function for active links
 window.copyManual = (path, btn) => {
   const fullLink = window.location.origin + path;
-  navigator.clipboard.writeText(fullLink);
 
-  const originalHtml = btn.innerHTML;
-  btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
-  btn.style.background = "#2ecc71";
+  navigator.clipboard.writeText(fullLink).then(() => {
+    const originalHtml = btn.innerHTML;
+    const originalBg = btn.style.backgroundColor;
 
-  setTimeout(() => {
-    btn.innerHTML = originalHtml;
-    btn.style.background = "";
-  }, 2000);
+    // Apply green state
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
+    btn.style.setProperty("background-color", "#27ae60", "important");
+    btn.style.setProperty("border-color", "#27ae60", "important");
+
+    setTimeout(() => {
+      btn.innerHTML = originalHtml;
+      btn.style.setProperty("background-color", originalBg);
+      btn.style.setProperty("border-color", "rgba(255, 255, 255, 0.2)");
+    }, 2000);
+  });
 };
 
-// 10. Global Clipboard Helper
+// Clipboard copy function for success messages
 window.copyToClipboard = (btn) => {
   const input = btn.parentElement.querySelector(".copy-url-input");
+  navigator.clipboard.writeText(input.value);
+  btn.innerText = "Copied!";
+  setTimeout(() => (btn.innerText = "Copy"), 2000);
+};
 
-  if (input) {
-    input.select();
-    navigator.clipboard.writeText(input.value);
+// Delete confirmation modal
+function confirmDelete() {
+  const modal = document.getElementById("custom-modal");
+  const confirmBtn = document.getElementById("modal-confirm");
+  const cancelBtn = document.getElementById("modal-cancel");
 
-    const originalText = btn.innerText;
-    btn.innerText = "Copied!";
-    btn.classList.add("btn-copied");
-    setTimeout(() => {
-      btn.innerText = originalText;
-      btn.classList.remove("btn-copied");
-    }, 2000);
+  return new Promise((resolve) => {
+    // Show the modal
+    modal.classList.remove("hidden-state");
+
+    // Click handlers
+    confirmBtn.onclick = () => {
+      modal.classList.add("hidden-state");
+      resolve(true);
+    };
+
+    cancelBtn.onclick = () => {
+      modal.classList.add("hidden-state");
+      resolve(false);
+    };
+  });
+}
+
+// Delete file record function for active links
+window.deleteFileRecord = async (id, btn) => {
+  // Wait for user to click the custom modal
+  const isConfirmed = await confirmDelete();
+
+  if (!isConfirmed) return;
+
+  try {
+    const res = await fetch(`/api/files/${id}?auth=${authKey}`, { method: "DELETE" });
+    if (res.ok) {
+      const item = btn.closest(".active-file-item");
+      item.style.opacity = "0";
+      item.style.transform = "scale(0.9)";
+      setTimeout(() => item.remove(), 300);
+    } else {
+      alert("Failed to delete file from server.");
+    }
+  } catch (err) {
+    console.error("Delete failed", err);
   }
 };
+
+// Start
+fetchActiveFiles();
