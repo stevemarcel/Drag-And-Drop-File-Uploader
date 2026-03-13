@@ -33,6 +33,7 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  padding: 2rem 0;
 }
 
 /* --- 2. LAYOUT COMPONENTS --- */
@@ -47,7 +48,7 @@ body {
   width: 850px;
   padding: 2rem;
   border-radius: 1rem;
-  margin: 2rem;
+  margin: auto;
 }
 
 .header {

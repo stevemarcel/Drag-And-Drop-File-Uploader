@@ -8,10 +8,16 @@
  * 4. INTERACTION    : Increasing touch target sizes for mobile buttons
  */
 
+body {
+  align-items: flex-start;
+  padding: 1rem 0;
+}
+
 .card {
   width: 95%;
   margin: 1rem auto;
   padding: 1.5rem 1rem;
+  overflow: visible;
 }
 
 .header {
@@ -51,6 +57,12 @@
 }
 
 /* Active List Mobile */
+.active-files-section {
+  margin-top: 20px;
+  padding: 15px;
+  overflow: visible;
+}
+
 .active-file-item {
   flex-direction: column;
   align-items: flex-start;
@@ -79,7 +91,7 @@
 }
 
 #active-files-list {
-  max-height: 450px;
+  max-height: none !important;
 }
 
 /* Extra Small Devices Overrides */
