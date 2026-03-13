@@ -11,6 +11,7 @@ export const adminAuth = (req, res, next) => {
   if (req.query.auth === ADMIN_SECRET) {
     next(); // Access granted
   } else {
-    res.status(403).sendFile(path.join(__dirname, "../Frontend/unauthorized.html")); // Access denied
+    const unauthorizedPath = path.join(__dirname, "..", "..", "Frontend", "unauthorized.html");
+    res.status(403).sendFile(unauthorizedPath);
   }
 };
