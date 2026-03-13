@@ -20,157 +20,7 @@ const errorTemplate = document.getElementById("error-template");
 const CLOUD_NAME = "dphlb0nsu";
 const UPLOAD_PRESET = "client_side_shark_upload";
 
-// 1. Authentication Logic
-// Toggle logic
-togglePassword.addEventListener("click", () => {
-  const type = authInput.getAttribute("type") === "password" ? "text" : "password";
-  authInput.setAttribute("type", type);
-
-  // Toggle icon classes
-  eyeIcon.classList.toggle("fa-eye");
-  eyeIcon.classList.toggle("fa-eye-slash");
-});
-
-loginForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const key = document.getElementById("authInput").value;
-  // Redirects current page to include the auth query
-  window.location.href =
-    window.location.origin + window.location.pathname + "?auth=" + encodeURIComponent(key);
-});
-
-// 2. Trigger File Selection
-form.addEventListener("click", () => fileInput.click());
-
-fileInput.onchange = ({ target }) => {
-  let file = target.files[0];
-  if (file) {
-    let fileName = file.name;
-    if (fileName.length >= 18) {
-      let splitName = fileName.split(".");
-      fileName = splitName[0].substring(0, 15) + "... ." + splitName[1];
-    }
-    uploadFile(file, fileName);
-  }
-};
-
-// 3. Drag and Drop Logic
-let dragCounter = 0;
-form.addEventListener("dragenter", (e) => {
-  e.preventDefault();
-  dragCounter++;
-  form.classList.add("form-hover");
-});
-
-form.addEventListener("dragleave", (e) => {
-  e.preventDefault();
-  dragCounter--;
-  if (dragCounter === 0) form.classList.remove("form-hover");
-});
-
-form.addEventListener("dragover", (e) => e.preventDefault());
-
-form.addEventListener("drop", (e) => {
-  e.preventDefault();
-  dragCounter = 0;
-  form.classList.remove("form-hover");
-  let file = e.dataTransfer.files[0];
-  if (file) uploadFile(file, file.name);
-});
-
-// 4. Upload Logic
-async function uploadFile(file, name) {
-  const userTitle = titleInput.value.trim() || file.name;
-  const folderName = userTitle.replace(/[^a-z0-9]/gi, "_");
-
-  // a. Prepare Cloudinary Form Data
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", UPLOAD_PRESET);
-  formData.append("folder", `shark_uploads/${folderName}`);
-
-  try {
-    // b. Upload directly to Cloudinary
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`);
-
-    xhr.upload.addEventListener("progress", ({ loaded, total }) => {
-      let fileLoaded = Math.floor((loaded / total) * 100);
-      let statusText = fileLoaded < 100 ? "Uploading to Cloud" : "Securing...";
-
-      progressArea.innerHTML = `
-        <li class="row">
-          <i class="fas fa-file-alt text-pry"></i>
-          <div class="file-contents">
-            <div class="file-details">
-              <span class="name">${name} • ${statusText}</span>
-              <span class="percent">${fileLoaded}%</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress" style="width: ${fileLoaded}%"></div>
-            </div>
-          </div>
-        </li>`;
-    });
-
-    xhr.onreadystatechange = async function () {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          const cloudRes = JSON.parse(xhr.responseText);
-          saveToDatabase(userTitle, cloudRes.secure_url, cloudRes.public_id);
-        } else {
-          progressArea.innerHTML = "";
-          showErrorState(xhr.status);
-        }
-      }
-    };
-    xhr.send(formData);
-  } catch (err) {
-    showErrorState("Upload Error");
-  }
-}
-
-// 5. Save Metadata to MongoDB
-async function saveToDatabase(userTitle, url, publicId) {
-  try {
-    const response = await fetch(`/api/uploads?auth=${authKey}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userTitle: userTitle,
-        cloudinaryUrl: url,
-        cloudinaryId: publicId,
-      }),
-    });
-
-    const contentType = response.headers.get("content-type");
-    if (contentType && contentType.indexOf("application/json") !== -1) {
-      const data = await response.json();
-      progressArea.innerHTML = "";
-
-      console.log("Mongo DB res:", data);
-
-      if (response.ok) {
-        showSuccessState(data);
-      } else {
-        showErrorState(response.status);
-      }
-    } else {
-      if (response.ok) {
-        // Fallback if server responds with 201 but empty body
-        progressArea.innerHTML = "";
-        showSuccessState({ userTitle: userTitle, fileId: "refresh-page" });
-      } else {
-        throw new Error("Non-JSON response");
-      }
-    }
-  } catch (err) {
-    console.error("The REAL error is:", err);
-    showErrorState("DB Error");
-  }
-}
-
-// 7. Fetches all active Uploads
+// 1. Fetches all active Uploads
 async function fetchActiveFiles() {
   const listContainer = document.querySelector("#active-files-list");
   if (!listContainer) return;
@@ -254,7 +104,160 @@ function calculateExpiry(createdAt) {
   }
 }
 
-// Admin-only: Delete file record and Cloudinary asset
+// Initial Fetch of Active Files
+fetchActiveFiles();
+
+// 2. Authentication Logic
+// Toggle logic
+togglePassword.addEventListener("click", () => {
+  const type = authInput.getAttribute("type") === "password" ? "text" : "password";
+  authInput.setAttribute("type", type);
+
+  // Toggle icon classes
+  eyeIcon.classList.toggle("fa-eye");
+  eyeIcon.classList.toggle("fa-eye-slash");
+});
+
+loginForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const key = document.getElementById("authInput").value;
+  // Redirects current page to include the auth query
+  window.location.href =
+    window.location.origin + window.location.pathname + "?auth=" + encodeURIComponent(key);
+});
+
+// 3. Trigger File Selection
+form.addEventListener("click", () => fileInput.click());
+
+fileInput.onchange = ({ target }) => {
+  let file = target.files[0];
+  if (file) {
+    let fileName = file.name;
+    if (fileName.length >= 18) {
+      let splitName = fileName.split(".");
+      fileName = splitName[0].substring(0, 15) + "... ." + splitName[1];
+    }
+    uploadFile(file, fileName);
+  }
+};
+
+// 4. Drag and Drop Logic
+let dragCounter = 0;
+form.addEventListener("dragenter", (e) => {
+  e.preventDefault();
+  dragCounter++;
+  form.classList.add("form-hover");
+});
+
+form.addEventListener("dragleave", (e) => {
+  e.preventDefault();
+  dragCounter--;
+  if (dragCounter === 0) form.classList.remove("form-hover");
+});
+
+form.addEventListener("dragover", (e) => e.preventDefault());
+
+form.addEventListener("drop", (e) => {
+  e.preventDefault();
+  dragCounter = 0;
+  form.classList.remove("form-hover");
+  let file = e.dataTransfer.files[0];
+  if (file) uploadFile(file, file.name);
+});
+
+// 5. Upload Logic
+async function uploadFile(file, name) {
+  const userTitle = titleInput.value.trim() || file.name;
+  const folderName = userTitle.replace(/[^a-z0-9]/gi, "_");
+
+  // a. Prepare Cloudinary Form Data
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", UPLOAD_PRESET);
+  formData.append("folder", `shark_uploads/${folderName}`);
+
+  try {
+    // b. Upload directly to Cloudinary
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`);
+
+    xhr.upload.addEventListener("progress", ({ loaded, total }) => {
+      let fileLoaded = Math.floor((loaded / total) * 100);
+      let statusText = fileLoaded < 100 ? "Uploading to Cloud" : "Securing...";
+
+      progressArea.innerHTML = `
+        <li class="row">
+          <i class="fas fa-file-alt text-pry"></i>
+          <div class="file-contents">
+            <div class="file-details">
+              <span class="name">${name} • ${statusText}</span>
+              <span class="percent">${fileLoaded}%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress" style="width: ${fileLoaded}%"></div>
+            </div>
+          </div>
+        </li>`;
+    });
+
+    xhr.onreadystatechange = async function () {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          const cloudRes = JSON.parse(xhr.responseText);
+          saveToDatabase(userTitle, cloudRes.secure_url, cloudRes.public_id);
+        } else {
+          progressArea.innerHTML = "";
+          showErrorState(xhr.status);
+        }
+      }
+    };
+    xhr.send(formData);
+  } catch (err) {
+    showErrorState("Upload Error");
+  }
+}
+
+// 6. Save Metadata to MongoDB
+async function saveToDatabase(userTitle, url, publicId) {
+  try {
+    const response = await fetch(`/api/uploads?auth=${authKey}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userTitle: userTitle,
+        cloudinaryUrl: url,
+        cloudinaryId: publicId,
+      }),
+    });
+
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.indexOf("application/json") !== -1) {
+      const data = await response.json();
+      progressArea.innerHTML = "";
+
+      console.log("Mongo DB res:", data);
+
+      if (response.ok) {
+        showSuccessState(data);
+      } else {
+        showErrorState(response.status);
+      }
+    } else {
+      if (response.ok) {
+        // Fallback if server responds with 201 but empty body
+        progressArea.innerHTML = "";
+        showSuccessState({ userTitle: userTitle, fileId: "refresh-page" });
+      } else {
+        throw new Error("Non-JSON response");
+      }
+    }
+  } catch (err) {
+    console.error("The REAL error is:", err);
+    showErrorState("DB Error");
+  }
+}
+
+// 7. Admin-only: Delete file record and Cloudinary asset
 window.deleteFileRecord = async (id, btn) => {
   if (!confirm("Are you sure you want to delete this file from the cloud and database?")) return;
 
@@ -274,23 +277,8 @@ window.deleteFileRecord = async (id, btn) => {
   }
 };
 
-// Simple helper for the manual copy buttons
-window.copyManual = (path, btn) => {
-  const fullLink = window.location.origin + path;
-  navigator.clipboard.writeText(fullLink);
-
-  const originalHtml = btn.innerHTML;
-  btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
-  btn.style.background = "#2ecc71";
-
-  setTimeout(() => {
-    btn.innerHTML = originalHtml;
-    btn.style.background = "";
-  }, 2000);
-};
-
 // 8. UI State Handlers
-// Show success state with download link
+// a. Show success state with download link
 function showSuccessState(data) {
   const clone = successTemplate.cloneNode(true);
   clone.id = "";
@@ -313,7 +301,7 @@ function showSuccessState(data) {
   fetchActiveFiles();
 }
 
-// Show error state with status code
+// b. Show error state with status code
 function showErrorState(status) {
   const clone = errorTemplate.cloneNode(true);
   clone.id = "";
@@ -322,7 +310,22 @@ function showErrorState(status) {
   uploadArea.prepend(clone);
 }
 
-// Global Clipboard
+// 9. Simple helper for the manual copy buttons
+window.copyManual = (path, btn) => {
+  const fullLink = window.location.origin + path;
+  navigator.clipboard.writeText(fullLink);
+
+  const originalHtml = btn.innerHTML;
+  btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
+  btn.style.background = "#2ecc71";
+
+  setTimeout(() => {
+    btn.innerHTML = originalHtml;
+    btn.style.background = "";
+  }, 2000);
+};
+
+// 10. Global Clipboard Helper
 window.copyToClipboard = (btn) => {
   const input = btn.parentElement.querySelector(".copy-url-input");
 
@@ -339,5 +342,3 @@ window.copyToClipboard = (btn) => {
     }, 2000);
   }
 };
-
-fetchActiveFiles();
