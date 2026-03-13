@@ -12,7 +12,7 @@ The uploader generates "Clean URLs" for direct asset downloads, bypassing standa
 
 [<kbd> <br> CHECK OUT LIVE DEMO <br> </kbd>][Link]
 
-[Link]: https://github.com/stevemarcel/Drag-And-Drop-File-Uploader/ "CHECK OUT LIVE DEMO"
+[Link]: https://drag-and-drop-uploader.onrender.com/ "CHECK OUT LIVE DEMO"
 
 ---
 
