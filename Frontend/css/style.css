@@ -290,6 +290,13 @@ header.active-header {
   display: block;
 }
 
+no-files {
+  color: white;
+  text-align: center;
+  padding: 20px;
+  /* list-style: none; */
+}
+
 .active-file-item {
   background: rgba(255, 255, 255, 0.05);
   margin-bottom: 10px;

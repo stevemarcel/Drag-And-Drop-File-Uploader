@@ -123,7 +123,7 @@ async function fetchActiveFiles() {
     const files = await res.json();
     selectors.listContainer.innerHTML = files.length
       ? ""
-      : '<li class="no-files" style="color:white; text-align:center; padding:20px;">No active links found.</li>';
+      : '<li class="no-files">No active links found.</li>';
 
     files.forEach((file) => {
       const expiry = calculateExpiry(file.createdAt);
