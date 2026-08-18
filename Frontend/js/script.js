@@ -1,10 +1,8 @@
-// Logic: Config -> UI Selectors -> Auth -> Upload -> DB -> UI Updates
+// Logic: Config -> UI Selectors -> Auth -> Logout -> Upload -> DB -> UI Updates
 
 // --- 1. CONFIGURATION ---
 const CLOUD_NAME = "dphlb0nsu";
 const UPLOAD_PRESET = "client_side_shark_upload";
-const urlParams = new URLSearchParams(window.location.search);
-const authKey = urlParams.get("auth");
 
 // --- 2. SELECTORS ---
 const selectors = {
@@ -14,30 +12,108 @@ const selectors = {
   progressArea: document.querySelector(".progress-area"),
   uploadArea: document.querySelector(".upload-area"),
   listContainer: document.querySelector("#active-files-list"),
+
   // Auth specific (only on unauthorized.html)
   loginForm: document.getElementById("loginForm"),
   authInput: document.getElementById("authInput"),
   togglePassword: document.getElementById("togglePassword"),
   eyeIcon: document.getElementById("eyeIcon"),
+  errorMessage: document.getElementById("errorMessage"),
+
+  // Dashboard
+  logoutBtn: document.getElementById("logoutBtn"),
 };
 
 // --- 3. AUTHENTICATION LOGIC (Only runs on Login Page) ---
 if (selectors.loginForm) {
+  // Show / hide password
   selectors.togglePassword.addEventListener("click", () => {
     const isPass = selectors.authInput.type === "password";
+
     selectors.authInput.type = isPass ? "text" : "password";
+
     selectors.eyeIcon.classList.toggle("fa-eye");
     selectors.eyeIcon.classList.toggle("fa-eye-slash");
   });
 
-  selectors.loginForm.addEventListener("submit", (e) => {
+  // Handle admin login
+  selectors.loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const key = selectors.authInput.value;
-    window.location.href = `${window.location.origin}${window.location.pathname}?auth=${encodeURIComponent(key)}`;
+
+    const key = selectors.authInput.value.trim();
+
+    if (!key) return;
+
+    // Clear previous error
+    selectors.errorMessage.textContent = "";
+    selectors.errorMessage.classList.remove("show");
+
+    const submitBtn = selectors.loginForm.querySelector(".submit-btn");
+
+    try {
+      submitBtn.disabled = true;
+
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          accessKey: key,
+        }),
+      });
+
+      const data = await res.json();
+
+      // Authentication successful
+      if (res.ok) {
+        window.location.href = "/";
+        return;
+      }
+
+      // Authentication failed
+      selectors.errorMessage.textContent = data.message || "Invalid access key.";
+
+      selectors.errorMessage.classList.add("show");
+
+      selectors.authInput.select();
+    } catch (error) {
+      console.error("Authentication failed:", error);
+
+      selectors.errorMessage.textContent = "Unable to connect to the server. Please try again.";
+
+      selectors.errorMessage.classList.add("show");
+    } finally {
+      submitBtn.disabled = false;
+    }
   });
 }
 
-// --- 4. FILE UPLOAD & DRAG/DROP (Only runs on Dashboard) ---
+// --- 4. ADMIN LOGOUT ---
+
+if (selectors.logoutBtn) {
+  selectors.logoutBtn.addEventListener("click", async () => {
+    try {
+      selectors.logoutBtn.disabled = true;
+
+      const res = await fetch("/api/admin/logout", {
+        method: "POST",
+      });
+
+      if (res.ok) {
+        window.location.href = "/";
+      } else {
+        console.error("Logout failed:", await res.text());
+        selectors.logoutBtn.disabled = false;
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+      selectors.logoutBtn.disabled = false;
+    }
+  });
+}
+
+// --- 5. FILE UPLOAD & DRAG/DROP (Only runs on Dashboard) ---
 if (selectors.form) {
   selectors.form.onclick = () => selectors.fileInput.click();
 
@@ -67,7 +143,7 @@ if (selectors.form) {
   });
 }
 
-// --- 5. CORE FUNCTIONS ---
+// --- 6. CORE FUNCTIONS ---
 // Upload handling function
 async function handleUpload(file) {
   const userTitle = selectors.titleInput.value.trim() || file.name;
@@ -101,12 +177,14 @@ async function handleUpload(file) {
 // Database saving function
 async function saveToDatabase(title, url, id) {
   try {
-    const res = await fetch(`/api/uploads?auth=${authKey}`, {
+    const res = await fetch("/api/uploads", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userTitle: title, cloudinaryUrl: url, cloudinaryId: id }),
     });
+
     const data = await res.json();
+
     selectors.progressArea.innerHTML = "";
     if (res.ok) showSuccess(data);
     else showError(res.status);
@@ -118,9 +196,11 @@ async function saveToDatabase(title, url, id) {
 // Fetch and display active files on page load
 async function fetchActiveFiles() {
   if (!selectors.listContainer) return;
+
   try {
-    const res = await fetch(`/api/all-files?auth=${authKey}`);
+    const res = await fetch("/api/all-files");
     const files = await res.json();
+
     selectors.listContainer.innerHTML = files.length
       ? ""
       : '<li class="no-files">No active links found.</li>';
@@ -151,7 +231,7 @@ async function fetchActiveFiles() {
   }
 }
 
-// --- 6. HELPERS ---
+// --- 7. HELPERS ---
 // Expiry calculation function
 function calculateExpiry(date) {
   const diff = new Date(date).getTime() + 8 * 24 * 60 * 60 * 1000 - Date.now();
@@ -203,7 +283,7 @@ function showError(msg) {
   selectors.uploadArea.prepend(temp);
 }
 
-// --- 7. GLOBAL WINDOW ATTACHMENTS ---
+// --- 8. GLOBAL WINDOW ATTACHMENTS ---
 // Error dismissal handler
 window.dismissError = (btn) => {
   if (selectors.progressArea) selectors.progressArea.innerHTML = "";
@@ -270,7 +350,10 @@ window.deleteFileRecord = async (id, btn) => {
   if (!isConfirmed) return;
 
   try {
-    const res = await fetch(`/api/files/${id}?auth=${authKey}`, { method: "DELETE" });
+    const res = await fetch(`/api/files/${id}`, {
+      method: "DELETE",
+    });
+
     if (res.ok) {
       const item = btn.closest(".active-file-item");
       item.style.opacity = "0";

@@ -94,29 +94,119 @@ body {
   max-height: none !important;
 }
 
-/* Extra Small Devices Overrides */
+/* --- UNAUTHORIZED LOGIN PAGE MOBILE --- */
+.auth-page {
+  align-items: center;
+  padding: 1.25rem;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 460px;
+  padding: 2.25rem 1.25rem 1.75rem;
+  border-radius: 16px;
+}
+
+.app-brand {
+  margin-bottom: 1.5rem;
+}
+
+.app-brand .brand-text {
+  font-size: 0.78rem;
+  letter-spacing: 3px;
+}
+
+.app-name {
+  font-size: 0.58rem;
+  letter-spacing: 1.4px;
+}
+
+.lock-icon-wrapper {
+  width: 68px;
+  height: 68px;
+  margin-bottom: 1rem;
+}
+
+.lock-icon-wrapper .icon {
+  font-size: 1.6rem;
+}
+
+.security-badge {
+  font-size: 0.56rem;
+  letter-spacing: 1px;
+  padding: 5px 9px;
+}
+
+.auth-title {
+  font-size: 1.45rem;
+  letter-spacing: 0.3px;
+}
+
+.auth-message {
+  font-size: 0.76rem;
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
+}
+
+.input-group {
+  min-height: 54px;
+}
+
+.input-group input {
+  height: 44px;
+  font-size: 0.78rem;
+}
+
+.icon-btn,
+.submit-btn {
+  width: 42px;
+  min-width: 42px;
+  height: 42px;
+}
+
+.error-message.show {
+  font-size: 0.68rem;
+}
+
+.auth-footer {
+  margin-top: 1.5rem;
+  padding-top: 1.15rem;
+}
+
 @media screen and (max-width: 380px) {
+  .auth-page {
+    padding: 1rem;
+  }
+
   .auth-container {
-    padding: 1.5rem 1rem;
+    padding: 1.75rem 1rem 1.5rem;
+  }
+
+  .app-brand {
+    margin-bottom: 1.25rem;
+  }
+
+  .lock-icon-wrapper {
+    width: 60px;
+    height: 60px;
+  }
+
+  .lock-icon-wrapper .icon {
+    font-size: 1.4rem;
   }
 
   .auth-title {
-    font-size: 1.4rem;
-    letter-spacing: 2px;
+    font-size: 1.3rem;
   }
 
   .auth-message {
-    font-size: 0.85rem;
+    font-size: 0.72rem;
   }
 
   .submit-btn,
   .icon-btn {
+    width: 44px;
     min-width: 44px;
     height: 44px;
   }
-}
-
-.download-btn {
-  font-size: 0.85rem;
-  padding: 1rem;
 }

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Access Denied | Shark Colours</title>
+    <title>Administrator Access | Shark Colours Drag & Drop Dashboard</title>
     <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
 
     <link rel="stylesheet" href="css/style.css" />
@@ -18,11 +18,26 @@
   </head>
   <body class="auth-page">
     <div class="auth-container">
+      <div class="app-brand">
+        <span class="brand-text">Shark Colours</span>
+        <span class="app-name">Drag & Drop Dashboard</span>
+      </div>
+
       <div class="lock-icon-wrapper">
         <i class="fas fa-lock icon"></i>
       </div>
+
+      <span class="security-badge">
+        <i class="fas fa-shield-halved"></i>
+        SECURE ADMIN AREA
+      </span>
+
       <h1 class="auth-title">Protected Area</h1>
-      <p class="auth-message">Please enter your Access Key to view the dashboard.</p>
+      <p class="auth-message">
+        Your access key is missing or invalid. Please enter the correct administrator access key to
+        continue to the Shark Colours Drag & Drop Dashboard.
+      </p>
+
       <form class="auth-form" id="loginForm">
         <div class="input-group">
           <input
@@ -42,6 +57,9 @@
           </button>
         </div>
       </form>
+
+      <p class="error-message" id="errorMessage"></p>
+
       <div class="auth-footer">
         <span class="brand-text">Shark Colours</span>
         <p class="support-text">System Administrator: Stevemarcel</p>

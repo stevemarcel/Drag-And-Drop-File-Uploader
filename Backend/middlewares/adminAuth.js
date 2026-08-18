@@ -6,12 +6,13 @@ const __dirname = path.dirname(__filename);
 
 export const adminAuth = (req, res, next) => {
   const ADMIN_SECRET = process.env.ADMIN_ACCESS_KEY;
-
-  // Check if the 'auth' query parameter matches our secret
-  if (req.query.auth === ADMIN_SECRET) {
-    next(); // Access granted
-  } else {
-    const unauthorizedPath = path.join(__dirname, "..", "..", "Frontend", "unauthorized.html");
-    res.status(403).sendFile(unauthorizedPath);
+  // Check if the administrator has an active authenticated session
+  if (req.session?.isAdmin === true) {
+    return next(); // Access granted
   }
+
+  // No valid session — serve the unauthorized page
+  const unauthorizedPath = path.join(__dirname, "..", "..", "Frontend", "unauthorized.html");
+
+  return res.status(403).sendFile(unauthorizedPath);
 };
