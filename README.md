@@ -1,4 +1,4 @@
-# Shark Colours | File Uploader
+# Drag and Drop File Uploader
 
 This project is a high-performance, full-stack file sharing application designed for professional asset delivery. Built with **Node.js, Express, and MongoDB**, it features a secure **"Drag & Drop" interface that automates the lifecycle of shared files.** The application integrates with **Cloudinary (or Backblaze B2)** for storage and features an **automated "expiry" system** that self-cleans both the cloud storage and database records **every 8 days.**
 
@@ -50,7 +50,7 @@ To run the project locally, follow these steps:
 1.  **Clone the repository:**
 
     ```bash
-    git clone [YOUR_REPO_URL]
+    git clone https://github.com/stevemarcel/Drag-And-Drop-File-Uploader.git
     ```
 
 2.  Navigate to the project directory.
@@ -72,15 +72,16 @@ To run the project locally, follow these steps:
 
 ## 📝 Environment Variables
 
-| Variable                | Description                                   |
-| :---------------------- | :-------------------------------------------- |
-| `NODE_ENV`              | Environment mode (`development`/`production`) |
-| `PORT`                  | Server port (default `5000`)                  |
-| `MONGO_URI`             | **MongoDB** connection string                 |
-| `ADMIN_ACCESS_KEY`      | Secret key used for `?auth=` URL protection   |
-| `CLOUDINARY_CLOUD_NAME` | Your Cloudinary Cloud Name                    |
-| `CLOUDINARY_API_KEY`    | Your Cloudinary API Key                       |
-| `CLOUDINARY_API_SECRET` | Your Cloudinary API Secret                    |
+| Variable                | Description                                    |
+| :---------------------- | :--------------------------------------------- |
+| `NODE_ENV`              | Environment mode (`development`/`production`)  |
+| `PORT`                  | Server port (default `5000`)                   |
+| `MONGO_URI`             | **MongoDB** connection string                  |
+| `ADMIN_ACCESS_KEY`      | Randomly generated secret key for admin access |
+| `SESSION_SECRET`        | Randomly generated secret key for sessions     |
+| `CLOUDINARY_CLOUD_NAME` | Your Cloudinary Cloud Name                     |
+| `CLOUDINARY_API_KEY`    | Your Cloudinary API Key                        |
+| `CLOUDINARY_API_SECRET` | Your Cloudinary API Secret                     |
 
 **Note:** Replace placeholders with your own credentials. Never commit sensitive
 data to version control.
@@ -89,19 +90,23 @@ data to version control.
 
 In the project root directory, you can run:
 
-- `npm start`: Starts the **production** server.
+- `npm server`: Starts the **development** server with `nodemon`.
+- `npm start`: Starts the **production** server with `node`.
 - `npm run cleanup`: Manually triggers the expired-file removal script.
 
 ---
 
 ## 🌐 API Endpoints
 
-| Method   | Endpoint         | Description                   | Access     |
-| :------- | :--------------- | :---------------------------- | :--------- |
-| `POST`   | `/api/uploads`   | Save Metadata                 | Admin Only |
-| `GET`    | `/api/files/:id` | Get an uploaded file by ID    | Public     |
-| `GET`    | `/api/files`     | Get all uploaded files        | Admin Only |
-| `DELETE` | `/api/files/:id` | Delete an uploaded file by ID | Admin Only |
+| Method   | Endpoint           | Description                   | Access     |
+| :------- | :----------------- | :---------------------------- | :--------- |
+| `POST`   | `/api/uploads`     | Save Metadata                 | Admin Only |
+| `GET`    | `/api/files/:id`   | Get an uploaded file by ID    | Public     |
+| `GET`    | `/api/files`       | Get all uploaded files        | Admin Only |
+| `DELETE` | `/api/files/:id`   | Delete an uploaded file by ID | Admin Only |
+| `POST`   | `/api/auth/login`  | Authenticate admin user       | Public     |
+| `POST`   | `/api/auth/logout` | Log out the current admin     | Admin Only |
+| `GET`    | `/api/auth/status` | Check admin authentication    | Admin Only |
 
 ---
 
@@ -109,20 +114,28 @@ In the project root directory, you can run:
 
 ```
 file-uploader/
-├── Frontend/            # Frontend Assets
-│   ├── css/             # style.css & mobile.css
-│   ├── js/              # script.js & download.js
-│   ├── img/             # Shark Colours Branding
-│   ├── download.html    # Download Page
-│   └── index.html       # Admin Dashboard
 ├── Backend/
-│   ├── config/          # Cloudinary & MongoDB Configuration
-│   ├── controllers/     # File & Cleanup Logic
-│   ├── models/          # Mongoose File Schema
-│   ├── routes/          # API & Auth Routes
-│   └── utils/           # node-cron Cleanup Scheduler
-├── .env                 # Local Environment Keys
-└── server.js            # Entry Point
+│   ├── config/             # Cloudinary & MongoDB Configuration
+│   ├── controllers/        # File & Cleanup Logic
+│   ├── middlewares/        # Authentication & Request Middleware
+│   ├── models/             # Mongoose File Schema
+│   ├── routes/             # API & Auth Routes
+│   ├── uploads/            # Temporary File Storage
+│   ├── utils/              # node-cron Cleanup Scheduler
+│   └── server.js           # Entry Point
+│
+├── Frontend/               # Frontend Assets
+│   ├── css/                # style.css & mobile.css
+│   ├── js/                 # script.js & download.js
+│   ├── img/                # Shark Colours Branding
+│   ├── download.html       # Download Page
+│   ├── index.html          # Admin Dashboard
+│   └── unauthorized.html   # Admin Login Page
+│
+├── .env                    # Local Environment Keys
+├── .gitignore              # Git Ignore Rules
+└── README.md               # Project Documentation
+
 ```
 
 ---
