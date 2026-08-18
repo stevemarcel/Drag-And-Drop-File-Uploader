@@ -3,54 +3,118 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Download Your Assets | Shark Colours</title>
+
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" media="screen and (max-width: 768px)" href="./css/mobile.css" />
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
     />
+
     <script src="./js/download.js" defer></script>
   </head>
-  <body class="bg-pry">
-    <div class="card bg-sec download-card">
-      <div class="img-container">
-        <img src="img/Shark-Colours-Logo.png" alt="Shark Colours" height="45" />
+
+  <body class="auth-page">
+    <main class="download-card auth-container">
+      <!-- Application Branding -->
+      <div class="app-brand">
+        <div class="img-container">
+          <img src="img/Shark-Colours-Logo.png" alt="Shark Colours" height="45" />
+        </div>
+        <div class="app-name">DIGITAL ASSET DELIVERY</div>
       </div>
 
+      <!-- Loading State -->
       <div id="loading" class="state-container">
-        <i class="fas fa-circle-notch fa-spin loading-icon"></i>
-        <p>Retrieving your assets...</p>
+        <div class="lock-icon-wrapper">
+          <i class="fas fa-circle-notch fa-spin icon"></i>
+        </div>
+
+        <div class="security-badge">
+          <i class="fas fa-shield-halved"></i>
+          SECURE DELIVERY
+        </div>
+
+        <h1 class="auth-title">Preparing Your Assets</h1>
+
+        <p class="auth-message">Please wait while we securely retrieve your design package.</p>
       </div>
 
+      <!-- Download Content -->
       <div id="content" class="state-container hidden-state">
+        <div class="lock-icon-wrapper">
+          <i class="fas fa-check icon"></i>
+        </div>
+
+        <div class="security-badge">
+          <i class="fas fa-circle-check"></i>
+          DOWNLOAD READY
+        </div>
+
+        <h1 class="auth-title">Your Assets Are Ready</h1>
+
+        <p class="auth-message">
+          Congratulations on your new brand identity! Your complete design package is ready for
+          download below.
+        </p>
+
         <div class="badge-wrapper">
-          <span class="project-badge" id="display-title">Project Assets</span>
+          <span class="project-badge" id="display-title"> Project Assets </span>
         </div>
 
         <div class="message-box">
           <p>
-            Congratulations on your new brand identity! We are confident it will make a significant
-            impression. Your design package is ready for download below.
+            We are confident your new identity will make a significant impression. Click the button
+            below to download your design assets.
           </p>
         </div>
 
         <a href="#" id="download-link" class="download-btn">
-          <i class="fas fa-file-download"></i> DOWNLOAD DESIGN ASSETS
+          <i class="fas fa-file-download"></i>
+          DOWNLOAD DESIGN ASSETS
         </a>
 
         <div class="footer-note">
-          <p>Need help? <a href="mailto:sharkcoloursng@gmail.com">Contact Support</a></p>
+          <p>
+            Need help?
+            <a href="mailto:sharkcoloursng@gmail.com"> Contact Support </a>
+          </p>
+
           <span id="expiry-timer" class="expiry-timer"></span>
         </div>
       </div>
 
+      <!-- Error / Expired Link State -->
       <div id="error-message" class="state-container error-container hidden-state">
-        <i class="fas fa-clock-rotate-left error-icon"></i>
-        <h1 class="error-header">Link Expired or Invalid</h1>
-        <p>This download link is no longer active.</p>
-        <a href="mailto:sharkcoloursng@gmail.com" class="footer-link">Request new link</a>
+        <div class="lock-icon-wrapper">
+          <i class="fas fa-clock-rotate-left icon"></i>
+        </div>
+
+        <div class="security-badge">
+          <i class="fas fa-triangle-exclamation"></i>
+          LINK UNAVAILABLE
+        </div>
+
+        <h1 class="auth-title">Link Expired or Invalid</h1>
+
+        <p class="auth-message">
+          This download link is no longer active or could not be verified. Please contact Shark
+          Colours to request a new link.
+        </p>
+
+        <div class="error-header">DOWNLOAD LINK UNAVAILABLE</div>
+
+        <a href="mailto:sharkcoloursng@gmail.com" class="footer-link"> Request New Link </a>
       </div>
-    </div>
+
+      <!-- Footer -->
+      <div class="auth-footer">
+        <span class="brand-text">SHARK COLOURS</span>
+        <span class="support-text"> Secure digital asset delivery </span>
+      </div>
+    </main>
   </body>
 </html>

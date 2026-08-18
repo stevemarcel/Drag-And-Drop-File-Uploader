@@ -1,32 +1,62 @@
 /**
- * * GLOBAL STYLESHEET
- * 1. DESIGN SYSTEM           : Variables, Fonts, Reset
- * 2. LAYOUT                  : Base Containers, Cards, Headers
- * 3. ADMIN DASHBOARD HEADER  : Toolbar, Status, Logout Button
- * 4. COMPONENTS              : Form, Inputs, Progress Bars
- * 5. FEEDBACK                : Success/Error States, Share Boxes
- * 6. DASHBOARD               : Active Uploads, List Items, Buttons
- * 7. UTILITIES               : Animations, Visibility Helpers
+ * SHARK COLOURS — GLOBAL STYLESHEET
  *
- * * Branding: Shark Colours (Primary: #202f66)
- * Admin: Stevemarcel
+ * 1. Design System
+ * 2. Global Layout
+ * 3. Dashboard
+ * 4. Forms & Uploads
+ * 5. Feedback & File Management
+ * 6. Modal
+ * 7. Download Page
+ * 8. Authentication Page
+ * 9. Utilities & Animations
  */
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;1,600&display=swap");
 
+/* =========================================================
+  1. DESIGN SYSTEM
+   ========================================================= */
+
 :root {
   --pry-color: #202f66;
-  --sec-bg: aliceblue;
+  --pry-hover: #2a3d82;
   --light-text: #495da6;
+  --sec-bg: aliceblue;
+
   --success-green: #27ae60;
   --error-red: #ff4d4d;
+
+  --white: #ffffff;
+  --black: #0b0b0b;
+
+  --text-muted: #858b9a;
+  --text-subtle: #646a78;
+  --text-dim: #5f6470;
+
+  --border-light: rgba(255, 255, 255, 0.09);
+  --border-subtle: rgba(255, 255, 255, 0.07);
+
+  --glass-bg: rgba(255, 255, 255, 0.035);
+  --glass-bg-soft: rgba(255, 255, 255, 0.025);
+
+  --glass-shadow: 0 25px 70px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
 }
+
+/* =========================================================
+  2. GLOBAL RESET
+   ========================================================= */
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "poppins", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
@@ -34,13 +64,18 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  min-height: 100dvh;
   padding: 2rem 0;
 }
 
-/* --- 2. LAYOUT COMPONENTS --- */
+/* =========================================================
+  3. GLOBAL LAYOUT
+   ========================================================= */
+
 .bg-pry {
   background-color: var(--pry-color);
 }
+
 .bg-sec {
   background-color: var(--sec-bg);
 }
@@ -48,17 +83,17 @@ body {
 .card {
   width: 850px;
   padding: 2rem;
-  border-radius: 1rem;
   margin: auto;
+  border-radius: 1rem;
 }
 
 .header {
+  padding-bottom: 1.5rem;
+  color: var(--pry-color);
   font-size: 1.5rem;
   font-weight: 600;
   text-align: center;
-  padding-bottom: 1.5rem;
   text-transform: uppercase;
-  color: var(--pry-color);
 }
 
 .img-container {
@@ -67,24 +102,105 @@ body {
   margin-bottom: 1rem;
 }
 
-/* --- 3. ADMIN DASHBOARD HEADER --- */
+/* =========================================================
+  4. ADMIN DASHBOARD
+   ========================================================= */
+
+.dashboard-page {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 2rem 1rem;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(32, 47, 102, 0.22), transparent 45%), var(--black);
+}
+
+.dashboard-page::before,
+.auth-page::before {
+  position: fixed;
+  top: -220px;
+  right: -180px;
+  width: 420px;
+  height: 420px;
+  content: "";
+  border-radius: 50%;
+  background: rgba(32, 47, 102, 0.12);
+  filter: blur(10px);
+  pointer-events: none;
+}
+
+.dashboard-page::after,
+.auth-page::after {
+  position: fixed;
+  bottom: -180px;
+  left: -140px;
+  width: 300px;
+  height: 300px;
+  content: "";
+  border-radius: 50%;
+  background: rgba(73, 93, 166, 0.08);
+  filter: blur(10px);
+  pointer-events: none;
+}
+
+.dashboard-card {
+  position: relative;
+  z-index: 1;
+  width: min(850px, 100%);
+  padding: 2.5rem;
+  margin: auto;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Dashboard branding */
+
+.dashboard-card .img-container {
+  margin-bottom: 1rem;
+}
+
+.dashboard-card .img-container img {
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Dashboard title */
+
+.dashboard-card .header {
+  padding-bottom: 0;
+  color: var(--white);
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: none;
+}
+
+/* Dashboard toolbar */
 
 .dashboard-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-top: -0.75rem;
-  margin-bottom: 1.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .admin-status {
   display: inline-flex;
+  align-items: center;
   gap: 7px;
-  color: var(--light-text);
-  font-size: 0.68rem;
+  color: #6477b8;
+  font-size: 0.65rem;
   font-weight: 500;
-  letter-spacing: 0.6px;
+  letter-spacing: 1px;
   text-transform: uppercase;
 }
 
@@ -98,12 +214,11 @@ body {
   justify-content: center;
   gap: 7px;
   padding: 7px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 7px;
   background: transparent;
-  border: 1px solid rgba(32, 47, 102, 0.25);
-  border-radius: 6px;
-  color: var(--pry-color);
-  font-family: "poppins", sans-serif;
-  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-size: 0.68rem;
   font-weight: 500;
   cursor: pointer;
   transition:
@@ -114,9 +229,9 @@ body {
 }
 
 .logout-btn:hover {
-  background: var(--pry-color);
-  border-color: var(--pry-color);
-  color: #ffffff;
+  border-color: rgba(73, 93, 166, 0.45);
+  background: rgba(32, 47, 102, 0.25);
+  color: var(--white);
   transform: translateY(-1px);
 }
 
@@ -130,17 +245,20 @@ body {
   transform: none;
 }
 
-/* --- 4. FORM & INPUTS --- */
+/* =========================================================
+  5. FORMS & UPLOADS
+   ========================================================= */
+
 .title-group {
   margin-bottom: 1rem;
 }
 
 .title-label {
   display: block;
-  font-size: 0.9rem;
   margin-bottom: 0.4rem;
-  font-weight: 500;
   color: var(--pry-color);
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .title-input {
@@ -149,7 +267,9 @@ body {
   border: 1px solid var(--light-text);
   border-radius: 0.4rem;
   outline: none;
-  transition: all 0.2s;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .title-input:focus {
@@ -158,84 +278,150 @@ body {
 }
 
 .form {
-  height: 13rem;
-  border: 2px dashed var(--light-text);
-  border-radius: 0.6rem;
-  margin: 1rem 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 13rem;
+  margin: 1rem 0;
+  border: 2px dashed var(--light-text);
+  border-radius: 0.6rem;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .form:hover,
 .form.form-hover {
-  border: 1px solid var(--pry-color);
+  border-color: var(--pry-color);
   background-color: rgba(73, 93, 166, 0.12);
 }
 
 .form i {
-  font-size: 5rem;
   color: var(--light-text);
-  transition: 0.2s;
+  font-size: 5rem;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
 }
 
 .form:hover i,
 .form.form-hover i {
-  transform: scale(1.1);
   color: var(--pry-color);
+  transform: scale(1.1);
 }
 
-/* --- 5. PROGRESS BARS --- */
+/* Dashboard form overrides */
+
+.dashboard-card .title-label {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.3px;
+}
+
+.dashboard-card .title-input {
+  padding: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--white);
+}
+
+.dashboard-card .title-input::placeholder {
+  color: var(--text-dim);
+}
+
+.dashboard-card .title-input:focus {
+  border-color: rgba(73, 93, 166, 0.8);
+  box-shadow: 0 0 0 3px rgba(32, 47, 102, 0.18);
+}
+
+.dashboard-card .form {
+  border: 1px dashed rgba(73, 93, 166, 0.45);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg-soft);
+}
+
+.dashboard-card .form:hover,
+.dashboard-card .form.form-hover {
+  border-color: rgba(73, 93, 166, 0.8);
+  background: rgba(32, 47, 102, 0.12);
+}
+
+.dashboard-card .form i {
+  color: #6477b8;
+}
+
+.dashboard-card .form:hover i,
+.dashboard-card .form.form-hover i {
+  color: #8294d0;
+}
+
+.dashboard-card .form p {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.dashboard-card .form .format-support {
+  color: #4f5460;
+  font-size: 0.65rem;
+}
+
+/* Progress */
+
 .row {
-  background: #dde6fa;
-  margin-bottom: 0.5rem;
-  padding: 1rem;
-  border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: #dde6fa;
 }
 
 .file-details {
-  width: 100%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
   margin-bottom: 5px;
-  font-size: 0.85rem;
   color: var(--pry-color);
+  font-size: 0.85rem;
 }
 
 .progress-bar {
-  height: 0.3rem;
   width: 100%;
-  background: aliceblue;
+  height: 0.3rem;
   border-radius: 0.2rem;
+  background: aliceblue;
 }
 
 .progress-bar .progress {
   height: 100%;
-  background: var(--light-text);
   border-radius: inherit;
+  background: var(--light-text);
 }
 
 .progress-bar-status {
-  font-size: 0.7rem;
   margin-top: 5px;
-  color: #495da6;
+  color: var(--light-text);
+  font-size: 0.7rem;
 }
 
-/* --- 4. SUCCESS & ERROR FEEDBACK --- */
+/* =========================================================
+  6. FEEDBACK & FILE MANAGEMENT
+   ========================================================= */
+
+/* Success */
+
 .success-row {
-  background: #f0fdf4;
-  border: 1px solid var(--success-green) !important;
+  position: relative;
   flex-direction: column;
   align-items: flex-start;
   padding: 1.5rem !important;
-  position: relative;
+  border: 1px solid var(--success-green) !important;
+  background: #f0fdf4;
 }
 
 .success-header {
@@ -250,85 +436,89 @@ body {
 }
 
 .success-text {
-  font-weight: 700 !important;
   color: var(--pry-color);
+  font-weight: 700 !important;
 }
 
 .expiry-warning {
+  margin-top: 8px;
+  color: #64748b;
   font-size: 0.75rem !important;
   font-style: italic !important;
-  color: #64748b;
-  margin-top: 8px;
 }
 
+/* Share box */
+
 .share-box {
-  background: #fff;
-  border: 1px dashed var(--success-green);
-  padding: 10px;
-  border-radius: 6px;
   display: flex;
   gap: 8px;
   width: 100%;
   margin-top: 10px;
+  padding: 10px;
+  border: 1px dashed var(--success-green);
+  border-radius: var(--radius-sm);
+  background: var(--white);
 }
 
 .share-box input {
   flex: 1;
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  font-family: monospace;
-  font-size: 13px;
   padding: 8px;
+  border: 1px solid #e9ecef;
   border-radius: 4px;
   outline: none;
+  background: #f8f9fa;
+  font-family: monospace;
+  font-size: 13px;
 }
 
 .share-box button {
-  background: var(--success-green);
-  color: white;
-  border: none;
   padding: 8px 15px;
+  border: none;
   border-radius: 4px;
+  background: var(--success-green);
+  color: var(--white);
   font-weight: 600;
   cursor: pointer;
 }
 
-.close-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: none;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-  color: #64748b;
-  transition: color 0.2s ease;
-  padding: 5px;
-  line-height: 1;
-}
-
-.close-btn:hover {
-  color: var(--error-red);
-}
+/* Error */
 
 .error-row {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #b91c1c;
   position: relative;
   padding-right: 40px;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
 }
 
+.close-btn,
 .close-error {
   position: absolute;
   top: 12px;
   right: 12px;
   background: none;
   border: none;
-  color: #b91c1c;
   cursor: pointer;
+}
+
+.close-btn {
+  padding: 5px;
+  color: #64748b;
   font-size: 1rem;
-  transition: opacity 0.2s;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: var(--error-red);
+}
+
+.close-error {
+  color: #b91c1c;
+  font-size: 1rem;
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease;
 }
 
 .close-error:hover {
@@ -336,39 +526,59 @@ body {
   color: #64748b;
 }
 
-/* --- 6. DASHBOARD / ACTIVE LIST --- */
+/* Active files */
+
 .active-files-section {
-  background: var(--pry-color);
   margin-top: 30px;
   padding: 20px;
-  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.dashboard-card .active-files-section {
+  background: var(--glass-bg-soft);
 }
 
 header.active-header {
+  display: block;
+  margin-bottom: 15px;
+  color: aliceblue !important;
   font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 15px;
-  text-transform: uppercase;
   letter-spacing: 1px;
-  color: aliceblue !important;
-  display: block;
+  text-transform: uppercase;
 }
 
-.no-files {
-  color: white;
-  text-align: center;
-  padding: 20px;
-  list-style: none;
+.dashboard-card header.active-header {
+  color: var(--white) !important;
+  font-size: 0.75rem;
+  letter-spacing: 1.2px;
 }
 
 .active-file-item {
-  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 10px;
   padding: 15px;
   border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dashboard-card .active-file-item {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.dashboard-card .active-file-item:hover {
+  border-color: rgba(73, 93, 166, 0.3);
+}
+
+.no-files {
+  padding: 20px;
+  color: var(--white);
+  text-align: center;
+  list-style: none;
 }
 
 .file-info {
@@ -378,14 +588,22 @@ header.active-header {
 }
 
 .file-name {
-  color: #fff;
+  color: var(--white);
   font-size: 0.95rem;
 }
 
+.dashboard-card .file-name {
+  color: var(--white);
+}
+
 .expiry-time {
-  font-size: 0.65rem;
-  font-weight: lighter;
   color: #cbd5e1;
+  font-size: 0.65rem;
+  font-weight: 300;
+}
+
+.dashboard-card .expiry-time {
+  color: var(--text-subtle);
 }
 
 .expiry-time i {
@@ -394,7 +612,7 @@ header.active-header {
 
 .urgent {
   color: var(--error-red);
-  font-weight: bold;
+  font-weight: 700;
   animation: pulse 2s infinite;
 }
 
@@ -403,95 +621,82 @@ header.active-header {
   gap: 8px;
 }
 
-.copy-small {
-  background-color: var(--pry-color);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+.copy-small,
+.delete-btn {
   padding: 6px 12px;
   border-radius: 4px;
-  cursor: pointer;
   font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.copy-small {
   display: flex;
   align-items: center;
   gap: 5px;
-  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--pry-color);
+  color: var(--white);
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .copy-small:hover {
-  background-color: #2a3d82;
+  background-color: var(--pry-hover);
 }
 
 .delete-btn {
-  background: rgba(255, 77, 77, 0.1);
   border: 1px solid rgba(255, 77, 77, 0.3);
+  background: rgba(255, 77, 77, 0.1);
   color: var(--error-red);
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.8rem;
 }
 
 .delete-btn:hover {
   background: var(--error-red);
-  color: white;
+  color: var(--white);
 }
 
-/* --- 6. UTILITIES --- */
-.hidden-state {
-  display: none !important;
-}
+/* =========================================================
+  7. MODAL
+   ========================================================= */
 
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
-
-/* --- 7. CUSTOM MODAL STYLES --- */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(15, 23, 42, 0.8);
-  backdrop-filter: blur(4px);
+  inset: 0;
+  z-index: 2000;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2000;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(4px);
 }
 
 .modal-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 1rem;
   width: 90%;
   max-width: 400px;
+  padding: 2rem;
+  border-radius: 1rem;
+  background: var(--white);
   text-align: center;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
   animation: modalPop 0.3s ease-out;
 }
 
 .modal-icon {
-  font-size: 3rem;
-  color: var(--error-red);
   margin-bottom: 1rem;
+  color: var(--error-red);
+  font-size: 3rem;
 }
 
 .modal-card h3 {
-  color: var(--pry-color);
   margin-bottom: 0.5rem;
+  color: var(--pry-color);
 }
 
 .modal-card p {
+  margin-bottom: 1.5rem;
   color: #64748b;
   font-size: 0.9rem;
-  margin-bottom: 1.5rem;
 }
 
 .modal-actions {
@@ -502,54 +707,54 @@ header.active-header {
 .modal-actions button {
   flex: 1;
   padding: 12px;
-  border-radius: 6px;
   border: none;
+  border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.2s ease;
 }
 
 .btn-secondary {
   background: #e2e8f0;
   color: #475569;
 }
+
 .btn-secondary:hover {
   background: #cbd5e1;
 }
 
 .btn-danger {
   background: var(--error-red);
-  color: white;
+  color: var(--white);
 }
+
 .btn-danger:hover {
   background: #dc2626;
 }
 
-@keyframes modalPop {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+/* =========================================================
+  8. DOWNLOAD PAGE
+   ========================================================= */
+
+.download-card {
+  width: min(850px, 100%) !important;
+  max-width: 850px;
+  text-align: center;
 }
 
-/* --- 8. DOWNLOAD PAGE SPECIFIC --- */
-.download-card {
-  text-align: center;
-  max-width: 550px;
+.download-card .img-container {
+  margin-bottom: 0.25rem;
 }
 
 .state-container {
+  width: 100%;
   padding: 1rem 0;
 }
 
 .loading-icon {
-  font-size: 3rem;
-  color: var(--pry-color);
   margin-bottom: 1rem;
+  color: var(--pry-color);
+  font-size: 3rem;
 }
 
 .badge-wrapper {
@@ -557,46 +762,52 @@ header.active-header {
 }
 
 .project-badge {
-  background: var(--pry-color);
-  color: white;
+  display: inline-block;
   padding: 0.4rem 1.2rem;
   border-radius: 2rem;
+  background: var(--pry-color);
+  color: var(--white);
   font-size: 0.85rem;
   font-weight: 500;
-  text-transform: uppercase;
   letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .message-box {
-  background: #f8fafc;
-  border-left: 4px solid var(--pry-color);
-  padding: 1.5rem;
-  border-radius: 0.5rem;
   margin-bottom: 2rem;
+  padding: 1.5rem;
+  border-left: 4px solid var(--pry-color);
+  border-radius: 0.5rem;
+  background: #f8fafc;
   text-align: left;
 }
 
 .message-box p {
-  font-size: 0.95rem;
   color: var(--pry-color);
+  font-size: 0.95rem;
   line-height: 1.6;
 }
 
 .download-btn {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  background: var(--success-green);
-  color: white;
-  text-decoration: none;
-  padding: 1.2rem 2.5rem;
-  border-radius: 0.6rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
-  margin-bottom: 2rem;
-  width: 100%;
   justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 64px;
+  margin-bottom: 2rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.6rem;
+  background: var(--success-green);
+  color: var(--white);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    filter 0.3s ease;
 }
 
 .download-btn:hover {
@@ -606,10 +817,11 @@ header.active-header {
 }
 
 .footer-note {
-  font-size: 0.85rem;
-  color: #64748b;
-  border-top: 1px solid #e2e8f0;
+  width: 100%;
   padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  color: #64748b;
+  font-size: 0.85rem;
 }
 
 .footer-note a {
@@ -617,7 +829,10 @@ header.active-header {
   font-weight: 600;
   text-decoration: none;
 }
+
 .footer-link {
+  display: inline-block;
+  margin-top: 1rem;
   color: var(--pry-color);
   font-size: small;
   font-style: italic;
@@ -625,228 +840,66 @@ header.active-header {
 
 .expiry-timer {
   display: block;
-  font-size: small;
   margin-top: 5px;
-  font-style: italic;
   color: var(--error-red);
+  font-size: small;
+  font-style: italic;
 }
 
 .error-container h3 {
-  color: var(--pry-color);
   margin: 1rem 0 0.5rem;
+  color: var(--pry-color);
 }
 
 .error-container .error-icon {
-  font-size: 4rem;
   color: var(--error-red);
+  font-size: 4rem;
 }
 
 .error-header {
-  background: var(--pry-color);
-  color: white;
   margin-top: 2rem;
   padding: 0.4rem 1.2rem;
-  font-weight: 500;
-  font-size: small;
-  text-transform: uppercase;
-}
-
-/* --- 9. UNAUTHORIZED LOGIN FORM PAGE --- */
-/* .auth-page {
-  background-color: #0b0b0b;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-}
-
-.auth-container {
-  text-align: center;
-  padding: 3rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-}
-
-.lock-icon-wrapper {
-  font-size: 4rem;
-  color: #ff4d4d;
-  margin-bottom: 1.5rem;
-  position: relative;
-  display: inline-block;
-}
-
-.auth-title {
-  color: #fff;
-  font-size: 1.8rem;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  margin-bottom: 1rem;
-}
-
-.auth-message {
-  color: #888;
-  line-height: 1.6;
-  font-size: 0.95rem;
-  margin-bottom: 2rem;
-}
-
-.auth-form {
-  margin-bottom: 2rem;
-}
-
-.input-group {
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 5px;
-  width: 100%;
-  min-height: 45px;
-  transition:
-    border-color 0.3s,
-    box-shadow 0.3s;
-}
-
-.input-group:focus-within {
-  border-color: var(--pry-color);
-  box-shadow: 0 0 10px rgba(0, 210, 255, 0.1);
-}
-
-.input-group input {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: white;
-  padding: 10px 12px;
-  min-width: 0;
-  flex: 1;
-  font-size: 0.9rem;
-}
-
-.input-group button {
-  border: none;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.2s ease;
-}
-
-.icon-btn {
-  background: transparent;
-  color: #666;
-  flex-shrink: 0; /* Prevents buttons from squishing on small screens */
-/* min-width: 40px; Reliable width for tapping */
-/* height: 38px;
-  font-size: 0.9rem;
-}
-
-.icon-btn:hover {
-  color: #aaa;
-}
-
-.submit-btn {
-  background: var(--pry-color);
-  color: white;
   border-radius: 6px;
-  width: 35px;
-  height: 35px;
-  margin-left: 2px;
+  background: var(--pry-color);
+  color: var(--white);
+  font-size: small;
+  font-weight: 500;
+  text-transform: uppercase;
 }
 
-.submit-btn:hover {
-  transform: scale(1.05);
-  filter: brightness(1.1);
-}
-
-.submit-btn:active {
-  transform: scale(0.95);
-}
-
-.auth-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 1.5rem;
-}
-
-.brand-text {
-  color: var(--pry-color);
-  font-weight: bold;
-  letter-spacing: 5px;
-  display: block;
-  margin-bottom: 5px;
-}
-
-.support-text {
-  font-size: 0.7rem;
-  color: #444;
-} */
-
-/* --- 9. UNAUTHORIZED LOGIN FORM PAGE --- */
+/* =========================================================
+  9. AUTHENTICATION PAGE
+   ========================================================= */
 
 .auth-page {
-  background: radial-gradient(circle at 50% 0%, rgba(32, 47, 102, 0.2), transparent 45%), #0b0b0b;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-height: 100vh;
   min-height: 100dvh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   margin: 0;
   padding: 2rem 1rem;
-  position: relative;
   overflow-x: hidden;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(32, 47, 102, 0.2), transparent 45%), var(--black);
 }
 
-/* Subtle application background detail */
-.auth-page::before {
-  content: "";
-  position: fixed;
-  width: 420px;
-  height: 420px;
-  top: -220px;
-  right: -180px;
-  border-radius: 50%;
-  background: rgba(32, 47, 102, 0.12);
-  filter: blur(10px);
-  pointer-events: none;
-}
-
-.auth-page::after {
-  content: "";
-  position: fixed;
-  width: 300px;
-  height: 300px;
-  bottom: -180px;
-  left: -140px;
-  border-radius: 50%;
-  background: rgba(73, 93, 166, 0.08);
-  filter: blur(10px);
-  pointer-events: none;
-}
-
-/* Main authentication card */
 .auth-container {
   position: relative;
   z-index: 1;
   width: min(100%, 460px);
   padding: 2.75rem 2.5rem 2.25rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
   text-align: center;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 20px;
-  box-shadow:
-    0 25px 70px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  box-shadow: var(--glass-shadow);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
-/* --- APPLICATION BRANDING --- */
+/* Application branding */
 
 .app-brand {
   display: flex;
@@ -857,7 +910,7 @@ header.active-header {
 
 .app-brand .brand-text {
   margin-bottom: 4px;
-  color: #ffffff;
+  color: var(--white);
   font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 4px;
@@ -872,27 +925,25 @@ header.active-header {
   text-transform: uppercase;
 }
 
-/* --- SECURITY ICON --- */
+/* Security */
 
 .lock-icon-wrapper {
-  width: 76px;
-  height: 76px;
-  margin: 0 auto 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 1.25rem;
+  border: 1px solid rgba(73, 93, 166, 0.3);
   border-radius: 50%;
   background: rgba(32, 47, 102, 0.16);
-  border: 1px solid rgba(73, 93, 166, 0.3);
   box-shadow: 0 0 30px rgba(32, 47, 102, 0.12);
 }
 
 .lock-icon-wrapper .icon {
-  font-size: 1.8rem;
   color: #6477b8;
+  font-size: 1.8rem;
 }
-
-/* --- SECURITY BADGE --- */
 
 .security-badge {
   display: inline-flex;
@@ -915,28 +966,27 @@ header.active-header {
   font-size: 0.65rem;
 }
 
-/* --- AUTH TYPOGRAPHY --- */
+/* Authentication typography */
 
 .auth-title {
-  color: #ffffff;
+  margin-bottom: 0.9rem;
+  color: var(--white);
   font-size: 1.65rem;
   font-weight: 600;
   line-height: 1.25;
-  text-transform: none;
   letter-spacing: 0.5px;
-  margin-bottom: 0.9rem;
 }
 
 .auth-message {
   max-width: 370px;
   margin: 0 auto 1.75rem;
-  color: #858b9a;
-  line-height: 1.7;
+  color: var(--text-muted);
   font-size: 0.82rem;
   font-weight: 400;
+  line-height: 1.7;
 }
 
-/* --- AUTH FORM --- */
+/* Authentication form */
 
 .auth-form {
   margin-bottom: 1rem;
@@ -948,9 +998,9 @@ header.active-header {
   width: 100%;
   min-height: 52px;
   padding: 5px;
-  background: rgba(255, 255, 255, 0.045);
   border: 1px solid rgba(255, 255, 255, 0.11);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.045);
   transition:
     border-color 0.25s ease,
     box-shadow 0.25s ease,
@@ -972,72 +1022,68 @@ header.active-header {
   min-width: 0;
   height: 42px;
   padding: 10px 13px;
-  background: transparent;
   border: none;
   outline: none;
-  color: #ffffff;
-  font-family: "poppins", sans-serif;
+  background: transparent;
+  color: var(--white);
   font-size: 0.82rem;
 }
 
 .input-group input::placeholder {
-  color: #5f6470;
+  color: var(--text-dim);
 }
 
 .input-group input:-webkit-autofill,
 .input-group input:-webkit-autofill:hover,
 .input-group input:-webkit-autofill:focus {
-  -webkit-text-fill-color: #ffffff;
+  -webkit-text-fill-color: var(--white);
   transition: background-color 9999s ease-in-out 0s;
 }
 
-/* --- PASSWORD VISIBILITY BUTTON --- */
+/* Input buttons */
 
 .input-group button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   transition:
     color 0.2s ease,
     background-color 0.2s ease,
     transform 0.2s ease;
 }
 
-.icon-btn {
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
-  background: transparent;
-  color: #626875;
-  border-radius: 7px;
-  font-size: 0.85rem;
-}
-
-.icon-btn:hover {
-  color: #aab3cf;
-  background: rgba(255, 255, 255, 0.04);
-}
-
-/* --- SUBMIT BUTTON --- */
-
+.icon-btn,
 .submit-btn {
   flex-shrink: 0;
   width: 40px;
+  min-width: 40px;
   height: 40px;
-  margin-left: 2px;
-  background: var(--pry-color);
-  color: #ffffff;
   border-radius: 7px;
   font-size: 0.85rem;
 }
 
+.icon-btn {
+  background: transparent;
+  color: #626875;
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #aab3cf;
+}
+
+.submit-btn {
+  margin-left: 2px;
+  background: var(--pry-color);
+  color: var(--white);
+}
+
 .submit-btn:hover {
-  background: #2a3d82;
-  transform: translateY(-1px);
+  background: var(--pry-hover);
   box-shadow: 0 5px 14px rgba(32, 47, 102, 0.3);
+  transform: translateY(-1px);
 }
 
 .submit-btn:active {
@@ -1051,7 +1097,7 @@ header.active-header {
   box-shadow: none;
 }
 
-/* --- AUTH ERROR MESSAGE --- */
+/* Authentication error */
 
 .error-message {
   display: block;
@@ -1075,14 +1121,14 @@ header.active-header {
   min-height: 36px;
   margin: 0.65rem 0 0;
   padding: 8px 12px;
-  opacity: 1;
-  transform: translateY(0);
-  background: rgba(255, 77, 77, 0.07);
   border: 1px solid rgba(255, 77, 77, 0.18);
   border-radius: 7px;
+  background: rgba(255, 77, 77, 0.07);
+  opacity: 1;
+  transform: translateY(0);
 }
 
-/* --- AUTH FOOTER --- */
+/* Authentication footer */
 
 .auth-footer {
   margin-top: 1.75rem;
@@ -1104,4 +1150,35 @@ header.active-header {
   color: #4f5460;
   font-size: 0.62rem;
   font-weight: 400;
+}
+
+/* =========================================================
+  10. UTILITIES & ANIMATIONS
+   ========================================================= */
+
+.hidden-state {
+  display: none !important;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

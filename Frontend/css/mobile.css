@@ -1,12 +1,15 @@
 /**
- * * RESPONSIVE OVERRIDES
+ * SHARK COLOURS — MOBILE OVERRIDES
+ *
  * Target: Screens <= 768px
  *
- * 1. SCALING        : Reducing card width and padding
- * 2. TYPOGRAPHY     : Adjusting font sizes for smaller viewports
- * 3. ADAPTIVE UI    : Converting flex rows to columns for mobile utility
- * 4. INTERACTION    : Increasing touch target sizes for mobile buttons
+ * Desktop styles remain in style.css.
+ * This file only contains responsive adjustments.
  */
+
+/* =========================================================
+  1. GENERAL MOBILE LAYOUT
+   ========================================================= */
 
 body {
   align-items: flex-start;
@@ -20,9 +23,13 @@ body {
   overflow: visible;
 }
 
-.header {
-  font-size: 1.1rem;
+.dashboard-card .header {
+  font-size: 1.4rem;
 }
+
+/* =========================================================
+  2. UPLOAD FORM
+   ========================================================= */
 
 .form {
   height: 10rem;
@@ -41,14 +48,17 @@ body {
   font-size: 0.85rem;
 }
 
-/* Success Box Mobile */
+/* =========================================================
+  3. SUCCESS / SHARE BOX
+   ========================================================= */
+
 .success-row .share-box {
   flex-direction: column;
 }
 
 .share-box input {
-  font-size: 11px;
   width: 100%;
+  font-size: 11px;
 }
 
 .share-box button {
@@ -56,7 +66,10 @@ body {
   padding: 12px;
 }
 
-/* Active List Mobile */
+/* =========================================================
+  4. ACTIVE FILES
+   ========================================================= */
+
 .active-files-section {
   margin-top: 20px;
   padding: 15px;
@@ -79,8 +92,6 @@ body {
 
 .file-actions {
   width: 100%;
-  display: flex;
-  gap: 8px;
 }
 
 .file-actions button {
@@ -94,7 +105,10 @@ body {
   max-height: none !important;
 }
 
-/* --- UNAUTHORIZED LOGIN PAGE MOBILE --- */
+/* =========================================================
+  5. AUTHENTICATION PAGE
+   ========================================================= */
+
 .auth-page {
   align-items: center;
   padding: 1.25rem;
@@ -132,9 +146,9 @@ body {
 }
 
 .security-badge {
+  padding: 5px 9px;
   font-size: 0.56rem;
   letter-spacing: 1px;
-  padding: 5px 9px;
 }
 
 .auth-title {
@@ -143,9 +157,9 @@ body {
 }
 
 .auth-message {
+  margin-bottom: 1.5rem;
   font-size: 0.76rem;
   line-height: 1.65;
-  margin-bottom: 1.5rem;
 }
 
 .input-group {
@@ -172,6 +186,45 @@ body {
   margin-top: 1.5rem;
   padding-top: 1.15rem;
 }
+
+/* =========================================================
+  6. DOWNLOAD PAGE MOBILE
+   ========================================================= */
+
+.download-card {
+  width: 100%;
+  max-width: none;
+  padding: 2rem 1.25rem 1.75rem;
+}
+
+.download-card .download-btn {
+  width: 100%;
+  min-height: 62px;
+  padding: 1rem;
+  gap: 10px;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.download-card .message-box {
+  padding: 1.25rem;
+}
+
+.download-card .message-box p {
+  font-size: 0.85rem;
+}
+
+.download-card .project-badge {
+  font-size: 0.75rem;
+}
+
+.download-card .footer-note {
+  font-size: 0.78rem;
+}
+
+/* =========================================================
+  7. VERY SMALL SCREENS
+   ========================================================= */
 
 @media screen and (max-width: 380px) {
   .auth-page {
@@ -200,6 +253,16 @@ body {
   }
 
   .auth-message {
+    font-size: 0.72rem;
+  }
+
+  .download-card {
+    padding: 1.75rem 1rem 1.5rem;
+  }
+
+  .download-card .download-btn {
+    min-height: 60px;
+    padding: 0.9rem 0.75rem;
     font-size: 0.72rem;
   }
 
